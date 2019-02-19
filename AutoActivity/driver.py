@@ -1,0 +1,25 @@
+# -*- coding:utf-8 -*-
+from selenium.webdriver import Remote
+from selenium import webdriver
+from AutoActivity import configs
+
+NODELIST = configs.NODELIST
+
+
+def browser(host, post, browserName):
+    # driver = webdriver.Chrome()
+    driverRemote = Remote(command_executor='http://' + host + ':' + post + '/wd/hub',
+                    desired_capabilities={'browserName': browserName},
+                    browser_profile=None,
+                    )
+    return driverRemote
+
+
+if __name__ == '__main__':
+    for node in NODELIST:
+        host = node.get('host')
+        post = node.get('post')
+        browserName = node.get('browserName')
+        driver = browser(host, post, browserName)
+        driver.get('http://www.baidu.com')
+        driver.quit()
