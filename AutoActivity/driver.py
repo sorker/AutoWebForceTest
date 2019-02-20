@@ -7,11 +7,17 @@ NODELIST = configs.NODELIST
 
 
 def browser(host, post, browserName):
+    """
+    :param host: 127.0.0.1
+    :param post: 22
+    :param browserName: chrome
+    :return: 返回浏览器驱动
+    """
     # driver = webdriver.Chrome()
     driverRemote = Remote(command_executor='http://' + host + ':' + post + '/wd/hub',
-                    desired_capabilities={'browserName': browserName},
-                    browser_profile=None,
-                    )
+                          desired_capabilities={'browserName': browserName},
+                          browser_profile=None,
+                          )
     return driverRemote
 
 

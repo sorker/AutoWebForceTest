@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 import paramiko
 import re
-import time
 from AutoActivity import configs
 
 DEFAULT_PORT = configs.SERVICE_PORT.get('default').get('port')  # 默认ssh端口
@@ -12,7 +11,7 @@ def sshConnect(hostname, username, password, port=DEFAULT_PORT):
     创建 ssh 连接函数
     hostname, port, username, password,访问linux的ip，端口，用户名以及密码
     """
-    paramiko.util.log_to_file('paramiko_log')
+    paramiko.util.log_to_file('log/paramiko_log')
     try:
         # 创建一个SSH客户端client对象
         ssh_client = paramiko.SSHClient()
@@ -25,18 +24,15 @@ def sshConnect(hostname, username, password, port=DEFAULT_PORT):
         exit()
     return ssh_client
 
-
 def sshCommand(sshClient, command):
     """创建命令执行函数,command 传入linux运行指令"""
     stdin, stdout, stderr = sshClient.exec_command(command)
     filesystem_usage = stdout.readlines()
     return filesystem_usage
 
-
 def sshClose(ssh_client):
     # 关闭ssh
     ssh_client.close()
-
 
 def sshMemInfo(service):
     """内存监控"""
@@ -71,7 +67,6 @@ def sshMemInfo(service):
     '''
     return int(MemTotal), int(MemTotal) - int(MemFree)
 
-
 def sshDiskInfo(service):
     """磁盘空间监控"""
     sshRes = sshCommand(service, 'df -h')
@@ -103,7 +98,6 @@ def sshDiskInfo(service):
     HardUser = sshResLists[0][2][:-1]
     return HardTotal, HardUser
 
-
 def sshComStr(service):
     """ 端口监控"""
     sshRes = sshCommand(service, 'netstat -tpln')
@@ -131,7 +125,6 @@ def sshComStr(service):
     '''
     return sshResLists
 
-
 def sshLoadStat(service):
     """    负载均衡    """
     sshRes = sshCommand(service, 'cat /proc/loadavg')
@@ -149,7 +142,6 @@ def sshLoadStat(service):
     print("最近运行的进程id：", loadavgs[4])
     '''
     return LoadStat, Theards
-
 
 def sshIONetwork(service):
     """    获取网络接口的输入和输出    """
@@ -175,7 +167,6 @@ def sshIONetwork(service):
             TransmitTotal += v.get('Transmit')
     return ReceiveTotal, TransmitTotal
 
-
 def httpLinks(service):
     """80端口连接总数"""
     sshRes = sshCommand(service, 'netstat -nat|grep -i "80"|wc -l')
@@ -183,7 +174,6 @@ def httpLinks(service):
     # li = sshResStr.strip().split()
     linksNum = sshResStr
     return int(linksNum)
-
 
 def allTask(service):
     ServerInfo = []

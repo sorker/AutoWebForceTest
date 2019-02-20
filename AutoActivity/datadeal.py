@@ -11,24 +11,34 @@ LONG_DATE = configs.LONG_DATE
 
 # 新建表并生成随机用户名密码
 def usersput(filename, num):
-    """num 为生成用户密码的数量, filename是文件名例：账号密码.xls"""
-    filename = os.path.join(DATA_DIR, filename)
-    workbook = xlwt.Workbook()
-    sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
-    sheet1.write(0, 0, 'user')
-    sheet1.write(0, 1, 'pwd')
-    for i in range(num):
-        user_pwd = 'test' + str(randint(1, LONG_DATE))
-        sheet1.write(i + 1, 0, user_pwd)
-        sheet1.write(i + 1, 1, user_pwd)
-    workbook.save(filename)
-    print('已生成有' + str(num) + '个用户的excle文件')
-    return 'success'
+    """
+    :param filename:  文件名, 例：账号密码.xls
+    :param num: 用户密码的数量
+    :return:  success
+    """
+    try:
+        filename = os.path.join(DATA_DIR, filename)
+        workbook = xlwt.Workbook()
+        sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
+        sheet1.write(0, 0, 'user')
+        sheet1.write(0, 1, 'pwd')
+        for i in range(num):
+            user_pwd = 'test' + str(randint(1, LONG_DATE))
+            sheet1.write(i + 1, 0, user_pwd)
+            sheet1.write(i + 1, 1, user_pwd)
+        workbook.save(filename)
+        print('已生成有' + str(num) + '个用户的excle文件')
+        return 'success'
+    except Exception as e:
+        return 'fail'
 
 
 # 读取xls的用户名密码并生成字典
 def readcvs(filename):
-    """filename是文件名,例：账号密码.xls"""
+    """
+    :param filename: 文件名,例：账号密码.xls
+    :return:  返回账号密码列表[[user1, pwd1],[user2, pwd2]]
+    """
     filename = os.path.join(DATA_DIR, filename)
     print(filename)
     ExcelFile = xlrd.open_workbook(filename)

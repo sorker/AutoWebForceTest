@@ -6,7 +6,7 @@
  @Email   : sorker0129@hotmail.com
 """
 
-import time, os
+import time
 from AutoActivity import services
 
 
