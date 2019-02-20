@@ -7,7 +7,7 @@ IMG_DIR = os.path.join(DATA_DIR, 'img')                 # 当前文件夹目录�
 LONG_DATE = 999999999999999                             # 默认长整型
 
 NODELIST = [
-    {"host": "127.0.0.1", "post": "4444", "browserName": "chrome"},
+    {"host": "127.0.0.1", "port": "4444", "browserName": "chrome"},
 ]   # 分布式地址
 
 SERVICE_PORT = {
