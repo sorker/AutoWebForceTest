@@ -10,4 +10,7 @@ NODELIST = [
     {"host": "127.0.0.1", "post": "4444", "browserName": "chrome"},
 ]   # 分布式地址
 
+SERVICE_PORT = {
+    'default': {'port': '22'}
+}
 
