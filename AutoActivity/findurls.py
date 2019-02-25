@@ -37,6 +37,7 @@ def all_urls_deep(driver, url, deep):
     end = time.time()
     return urls
 
+
 if __name__ in '__main':
     print(site_urls(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/'))
     print(all_urls_deep(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/discuss3/thread.php?tid=28', deep=2))

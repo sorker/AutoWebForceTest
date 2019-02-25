@@ -6,7 +6,7 @@ from AutoActivity import configs
 NODELIST = configs.NODELIST
 
 
-def browser(host, port, browserName):
+def browser(host, browserName):
     """
     :param host: 127.0.0.1
     :param post: 22
@@ -14,9 +14,8 @@ def browser(host, port, browserName):
     :return: 返回浏览器驱动
     """
     # driver = webdriver.Chrome()
-    driverRemote = Remote(command_executor='http://' + host + ':' + port + '/wd/hub',
-                          desired_capabilities={'browserName': browserName},
-                          browser_profile=None,
+    driverRemote = Remote(command_executor='http://' + host,
+                          desired_capabilities={'browserName': browserName}
                           )
     return driverRemote
 

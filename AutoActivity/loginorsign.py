@@ -3,9 +3,10 @@ from selenium import webdriver
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from time import time
 from AutoActivity import configs
+from AutoActivity import driver
 
 IMG_DIR = configs.IMG_DIR
-
+NODELIST = configs.NODELIST[0]
 
 def login(driver, user, pwd):
     """
@@ -73,10 +74,10 @@ def sign(driver, user, pwd):
 
 
 if __name__ == "__main__":
-    driver = webdriver.Firefox()
-    a = loginorsign()
-    print(a.sign(driver, user='1', pwd=''))
-    print(a.login(driver, user='test', pwd='12346'))
+    # driver = webdriver.Firefox()
+    driver = driver.browser(NODELIST.get('host'), NODELIST.get('port'), NODELIST.get('browserName'))
+    print(sign(driver, user='1', pwd=''))
+    print(login(driver, user='test', pwd='12346'))
 
 
 

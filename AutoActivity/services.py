@@ -3,10 +3,8 @@ import paramiko
 import re
 from AutoActivity import configs
 
-DEFAULT_PORT = configs.SERVICE_PORT.get('default').get('port')  # 默认ssh端口
 
-
-def sshConnect(hostname, username, password, port=DEFAULT_PORT):
+def sshConnect(hostname, username, password, port):
     """
     创建 ssh 连接函数
     hostname, port, username, password,访问linux的ip，端口，用户名以及密码
@@ -175,6 +173,14 @@ def httpLinks(service):
     linksNum = sshResStr
     return int(linksNum)
 
+
+def linuxNode(service):
+    sshRes = sshCommand(service, 'java -jar /home/node/selenium_server/selenium-server-standalone-3.141.59.jar '
+                                 '-role node -port 6666 -hub http://192.168.0.114:4444/grid/register')
+    sshResStr = ''.join(sshRes)
+    return sshResStr
+
+
 def allTask(service):
     ServerInfo = []
     TotalM, UsedM = sshMemInfo(service)
@@ -198,11 +204,13 @@ def allTask(service):
 
 
 if __name__ in '__main__':
-    service = sshConnect('192.168.0.114', 'root', '123456', '22')
+    service = sshConnect('192.168.50.243', 'root', '123456', '22')
     # """ 端口监控"""
     # ReciveTotal, SendTotal, sshResLists = sshComStr(service)
     # print('总接收流量：', ReciveTotal, '总发送流量：', SendTotal, '端口信息 ：', sshResLists)
 
-    allTask(service)
-
+    # allTask(service)
+    print(allTask(service))
+    # print(linuxNode(service))
+    # print('q')
     sshClose(service)
