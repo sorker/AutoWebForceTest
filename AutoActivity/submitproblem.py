@@ -6,7 +6,7 @@
  @Email   : sorker0129@hotmail.com
 """
 from AutoActivity import loginorsign
-from AutoActivity import driver
+from AutoActivity import driverremote
 from AutoActivity import configs
 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -27,16 +27,16 @@ DEFAULT_ANSWER = '#include <stdio.h>\n' \
                  '}'
 
 
-def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER):
+def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', pwd='123456'):
     """
     网站问题页面提交
     :param driver: 浏览器驱动
     :param problem_id: 问题地址，默认1000。区间[1000-1653]
     :return:
     """
-    username = driver.find_element_by_id('profile')
+    username = driver.find_element_by_id('profile')   # 验证是否登陆
     if username.text == '登录':
-        loginorsign.login(driver=driver, user='test', pwd='123456')
+        loginorsign.login(driver=driver, user=user, pwd=pwd)
     driver.get('http://zwu.hustoj.com/problem.php?id=' + problem_id)
     driver.find_element_by_link_text('提交').click()
     sleep(0.4)

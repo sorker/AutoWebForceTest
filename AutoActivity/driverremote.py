@@ -23,8 +23,7 @@ def browser(host, browserName):
 if __name__ == '__main__':
     for node in NODELIST:
         host = node.get('host')
-        post = node.get('post')
         browserName = node.get('browserName')
-        driver = browser(host, post, browserName)
+        driver = browser(host, browserName)
         driver.get('http://www.baidu.com')
         driver.quit()

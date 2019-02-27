@@ -18,19 +18,23 @@ def usersput(filename, num):
     """
     try:
         filename = os.path.join(DATA_DIR, filename)
-        workbook = xlwt.Workbook()
-        sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
-        sheet1.write(0, 0, 'user')
-        sheet1.write(0, 1, 'pwd')
-        for i in range(num):
-            user_pwd = 'test' + str(randint(1, LONG_DATE))
-            sheet1.write(i + 1, 0, user_pwd)
-            sheet1.write(i + 1, 1, user_pwd)
-        workbook.save(filename)
-        print('已生成有' + str(num) + '个用户的excle文件')
-        return 'success'
+        if not os.path.isfile(filename):  # 判断文件夹是否存在，如果不存在就创建一个
+            open(filename, 'w')
+            workbook = xlwt.Workbook()
+            sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
+            sheet1.write(0, 0, 'user')
+            sheet1.write(0, 1, 'pwd')
+            for i in range(num):
+                user_pwd = 'test' + str(randint(1, LONG_DATE))
+                sheet1.write(i + 1, 0, user_pwd)
+                sheet1.write(i + 1, 1, user_pwd)
+            workbook.save(filename)
+            # print('已生成有' + str(num) + '个用户的excle文件')
+            return 'success'
+        else:
+            return 'fail-1'
     except Exception as e:
-        return 'fail'
+        return 'fail-2, error: %s' % e
 
 
 # 读取xls的用户名密码并生成字典
@@ -40,7 +44,6 @@ def readcvs(filename):
     :return:  返回账号密码列表[[user1, pwd1],[user2, pwd2]]
     """
     filename = os.path.join(DATA_DIR, filename)
-    print(filename)
     ExcelFile = xlrd.open_workbook(filename)
     sheet = ExcelFile.sheet_by_name(ExcelFile._sheet_names[0])
     # rows = sheet.row_values(0)  # 获取第一行的所有值
@@ -59,5 +62,7 @@ def readcvs(filename):
     user_pwd.pop(0)
     return user_pwd
 
-# usersput('账号密码.xls', 10)
-# print(readcvs('账号密码1.xls'))
+
+if __name__ == "__main__":
+    print(usersput('账号密码2.xls', 10))
+    # print(readcvs('账号密码1.xls'))

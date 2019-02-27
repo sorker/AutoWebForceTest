@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from time import time
 from AutoActivity import configs
-from AutoActivity import driver
+from AutoActivity import driverremote
 
 IMG_DIR = configs.IMG_DIR
 NODELIST = configs.NODELIST[0]
@@ -56,9 +56,11 @@ def sign(driver, user, pwd):
         password.send_keys(pwd)
         passwordagain.send_keys(pwd)
         submit.click()
+        driver.switch_to.default_content()
+        # print(user, pwd, 'success')
         return 'sign: success'
     except UnexpectedAlertPresentException:
-        return 'sign: User ID Too Short! Password should be Longer than 6!'
+        return 'sign: User ID Too Short OR Password should be Longer than 6!'
     except Exception:
         return '未知错误，请联系管理员'
     '''
@@ -75,9 +77,12 @@ def sign(driver, user, pwd):
 
 if __name__ == "__main__":
     # driver = webdriver.Firefox()
-    driver = driver.browser(NODELIST.get('host'), NODELIST.get('port'), NODELIST.get('browserName'))
-    print(sign(driver, user='1', pwd=''))
-    print(login(driver, user='test', pwd='12346'))
+    driver = driverremote.browser(NODELIST.get('host'), NODELIST.get('browserName'))
+    result = sign(driver, user='1', pwd='')
+    print(result)
+    result = login(driver, user='test', pwd='12346')
+    print(result)
+    driver.quit()
 
 
 
