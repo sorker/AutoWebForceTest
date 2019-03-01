@@ -8,8 +8,8 @@ IMG_DIR = os.path.join(DATA_DIR, 'img')                 # 当前文件夹目录�
 LONG_DATE = 9                         # 默认长整型
 
 NODELIST = [
-    {"host": "127.0.0.1:4444/wd/hub", "browserName": "chrome"},  # 分布式节点的地址、自动化端口、运行的浏览器驱动
-    {"host": "127.0.0.1:5555/wd/hub", "browserName": "firefox"},
+    # {"host": "127.0.0.1:4444/wd/hub", "DesiredCapabilities": DC.CHROME},  # 分布式节点的地址、自动化端口、运行的浏览器驱动
+    {"host": "127.0.0.1:5555/wd/hub", "DesiredCapabilities": DC.FIREFOX},
     # {"host": "192.168.0.110:4444", "browserName": "chrome"},
 ]   # 分布式地址
 

@@ -23,7 +23,7 @@ DEFAULT_ANSWER = '#include <stdio.h>\n' \
                  '{\nint a,b;' \
                  '\nscanf("%d %d",&a, &b);\n' \
                  'printf("%d\\n",a+b);\n' \
-                 'return 0;\n' \
+                 'return 0\n' \
                  '}'
 
 
@@ -45,13 +45,17 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
     driver.find_element_by_id('textarea').send_keys(answer)
     driver.switch_to.default_content()
     driver.find_element_by_id('Submit').click()
-    sleep(7)
+    sleep(1)
     try:
         message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
+        while message_element.text == '等待' or message_element.text == '编译中':
+            # print(message_element.text)
+            sleep(0.8)
+            message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
     except NoSuchElementException:
         message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/a')
-    except Exception:
-        return '获取结果超时'
+    except Exception as e:
+        return '获取结果超时, erroe %s' % e
     message = message_element.text
     return message
 
@@ -59,7 +63,7 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
 if __name__ == "__main__":
     for nodelist in NODELIST:  # 分布式
         driver = Remote(command_executor='http://' + nodelist.get('host'),
-                        desired_capabilities={'browserName': nodelist.get('browserName')}
+                        desired_capabilities=nodelist.get('DesiredCapabilities')
                         )
         # driver = driver.browser(NODELIST[1].get('host'), NODELIST[1].get('browserName'))
         driver.get('http://zwu.hustoj.com')
