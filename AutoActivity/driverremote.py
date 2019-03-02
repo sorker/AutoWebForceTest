@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from selenium.webdriver import Remote
 from selenium import webdriver
-from AutoActivity import configs, alltask
+from AutoActivity import configs
 import time
 
 NODELIST = configs.NODELIST

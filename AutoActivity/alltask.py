@@ -5,14 +5,17 @@
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """
-import multiprocessing
-import os
-import time
+import django, os
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'AutoWebForceTest.settings')
+django.setup()
+
+import multiprocessing
 from AutoActivity import configs, submitproblem, services, driverremote, loginorsign,datadeal
 from AutoActivity.myexception.loginError import defaultError
 from selenium.webdriver import Remote
 from selenium import webdriver
+from ActivityModel.models import UserLogin, LoginProblem, TestService, ProcesssPart
 
 SERVICES = configs.SERVICES[0]
 NODELIST = configs.NODELIST

@@ -3,13 +3,14 @@ import paramiko
 import re
 from AutoActivity import configs
 
+LOG_DIR = configs.LOG_DIR
 
 def sshConnect(hostname, username, password, port):
     """
     创建 ssh 连接函数
     hostname, port, username, password,访问linux的ip，端口，用户名以及密码
     """
-    paramiko.util.log_to_file('log/paramiko_log')
+    paramiko.util.log_to_file(LOG_DIR)
     try:
         # 创建一个SSH客户端client对象
         ssh_client = paramiko.SSHClient()
@@ -22,11 +23,13 @@ def sshConnect(hostname, username, password, port):
         exit()
     return ssh_client
 
+
 def sshCommand(sshClient, command):
     """创建命令执行函数,command 传入linux运行指令"""
     stdin, stdout, stderr = sshClient.exec_command(command)
     filesystem_usage = stdout.readlines()
     return filesystem_usage
+
 
 def sshClose(ssh_client):
     # 关闭ssh
@@ -204,13 +207,13 @@ def allTask(service):
 
 
 if __name__ in '__main__':
-    service = sshConnect('192.168.50.243', 'root', '123456', '22')
+    service = sshConnect('192.168.100.152', 'root', '123456', '22')
     # """ 端口监控"""
     # ReciveTotal, SendTotal, sshResLists = sshComStr(service)
     # print('总接收流量：', ReciveTotal, '总发送流量：', SendTotal, '端口信息 ：', sshResLists)
 
-    # allTask(service)
-    print(allTask(service))
+    args = allTask(service)
+    print(args)
     # print(linuxNode(service))
     # print('q')
     sshClose(service)

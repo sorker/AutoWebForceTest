@@ -8,20 +8,21 @@ from AutoActivity import driverremote
 IMG_DIR = configs.IMG_DIR
 NODELIST = configs.NODELIST[0]
 
-def login(driver, user, pwd):
+def login(driver, url, user, pwd):
     """
     :param self:
     :param driver:  driver为浏览器驱动
+    :param url:     登录地址
     :param user:    user为用户名
     :param pwd:     pwd为密码
     :return:        message
     desc:使用登录方法可直接跳转到登录页面
     """
     try:
-        driver.get('http://zwu.hustoj.com/loginpage.php')
-        username = driver.find_element_by_xpath('/html/body/div[1]/div/form/div[1]/div/input')
-        password = driver.find_element_by_xpath('/html/body/div[1]/div/form/div[2]/div/input')
-        submit = driver.find_element_by_xpath('/html/body/div[1]/div/form/div[3]/div[1]/button')
+        driver.get(url)
+        username = driver.find_element_by_xpath('//input[contains(@placeholder, "用户名")]')
+        password = driver.find_element_by_xpath('//input[contains(@placeholder, "密码")]')
+        submit = driver.find_element_by_xpath('//*[@type="submit"]')
         username.clear()
         password.clear()
         username.send_keys(user)
@@ -35,10 +36,10 @@ def login(driver, user, pwd):
         # self.driver.save_screenshot(IMG_DIR + '\\' + str(int(time())) + '.png')
         # print(message)
         return 'login: UserName or Password Wrong'
-    except Exception:
+    except Exception as e:
         # print('Expection occur')
         # print(e)
-        return '未知错误，请联系管理员'
+        return '未知错误.error: %s' % e
 
 
 def sign(driver, user, pwd):
@@ -77,10 +78,11 @@ def sign(driver, user, pwd):
 
 if __name__ == "__main__":
     # driver = webdriver.Firefox()
-    driver = driverremote.browser(NODELIST.get('host'), NODELIST.get('browserName'))
+    driver = driverremote.browser(NODELIST.get('host'), NODELIST.get('DesiredCapabilities'))
     result = sign(driver, user='1', pwd='')
     print(result)
-    result = login(driver, user='test', pwd='12346')
+    url = 'http://zwu.hustoj.com/loginpage.php'
+    result = login(driver, url, user='test', pwd='12346')
     print(result)
     driver.quit()
 

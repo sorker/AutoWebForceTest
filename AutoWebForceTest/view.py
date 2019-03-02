@@ -3,10 +3,10 @@ from django.shortcuts import render, HttpResponse
 import json
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'base/../templates/index.html')
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'base/dashboard.html')
 
 
