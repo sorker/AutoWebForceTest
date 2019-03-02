@@ -1,5 +1,12 @@
 
 {% extends "base/base.html" %}
+{% block navigationBar %}
+    {% include "base/navigationBar.html" %}
+{% endblock %}
 {% block indexInfo %}
-    {% include "base/indexInfo.html" %}
+    <div class="jumbotron" style="margin: 200px; padding: 10px">
+        <h1>Web 自动化测试</h1>
+        <p class="lead">对目前而言，企业在web测试中使用最多的还是人工测试。相比重复繁琐的工作，机器自动化测试对企业的利益更有帮助，在使用中更占优势。</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+    </div>
 {% endblock %}

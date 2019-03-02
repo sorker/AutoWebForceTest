@@ -20,5 +20,8 @@ from . import index, view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view.index),
-    path('dashboard/', view.dashboard)
+    path('project/', view.project),
+    path('services/', view.services),
+    path('downloads/', view.downloads),
+    path('about/', view.about),
 ]

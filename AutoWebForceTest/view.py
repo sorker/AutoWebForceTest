@@ -2,11 +2,22 @@
 from django.shortcuts import render, HttpResponse
 import json
 
+
 def index(request):
-    return render(request, 'base/../templates/index.html')
+    return render(request, 'index.html')
 
 
-def dashboard(request):
-    return render(request, 'base/dashboard.html')
+def project(request):
+    return render(request, 'project.html')
 
 
+def services(request):
+    return render(request, 'services.html')
+
+
+def downloads(request):
+    return render(request, 'downloads.html')
+
+
+def about(request):
+    return render(request, 'about.html')
