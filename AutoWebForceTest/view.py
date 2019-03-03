@@ -8,7 +8,7 @@ def index(request):
 
 
 def projects(request):
-    return render(request, 'projects.html')
+    return render(request, 'projects/projects.html')
 
 
 def services(request):

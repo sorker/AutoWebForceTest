@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="/project">概述 <span class="sr-only">(current)</span></a></li>
+                <li><a href="/projects">概述 <span class="sr-only">(current)</span></a></li>
                 <li><a href="/reports">Reports</a></li>
                 <li><a href="/analytics">Analytics</a></li>
                 <li><a href="/export">Export</a></li>
@@ -62,7 +62,7 @@
         currurl = currurl.replace('/', '').replace('/', '');
         var li_elements = document.getElementsByTagName('li');
         if (currurl == 'projects') {
-            alert(currurl+li_elements.length);
+            console.log(currurl+li_elements.length);
             li_elements[1].setAttribute("class", "active");
             li_elements[5].setAttribute("class", "active");
         } else if (currurl == 'downloads') {

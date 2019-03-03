@@ -424,7 +424,7 @@ p {
 }
 
 /*--//pop-up-ends-here--*/
-
+/*--
 footer {
     font-size: 15px;
     font-weight: 500;
@@ -440,7 +440,7 @@ footer a {
     font-weight: 600;
     color: #999;
 }
-
+--*/
 /*--responsive--*/
 @media (max-width: 1920px) {
     h1 {
