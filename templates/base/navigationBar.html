@@ -1,9 +1,27 @@
 <nav>
     <ul class="nav nav-justified">
-        <li class="active"><a href="/">Home</a></li>
-        <li><a href="/project">Projects</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/projects">Projects</a></li>
         <li><a href="/services">Services</a></li>
         <li><a href="/downloads">Downloads</a></li>
         <li><a href="/about">About</a></li>
     </ul>
 </nav>
+
+{% block customjs %}
+<script type="application/javascript">
+    var currurl = window.location.pathname;
+    currurl = currurl.replace('/', '') .replace('/', '');
+    var li_elements = document.getElementsByTagName('li');
+    if(currurl == 'services'){
+        li_elements[2].setAttribute("class", "active");
+    }else if(currurl == 'downloads'){
+        li_elements[3].setAttribute("class", "active");
+    }else if(currurl == 'about'){
+        li_elements[4].setAttribute("class", "active");
+    }else if(currurl == ''){
+        li_elements[0].setAttribute("class", "active");
+    }
+</script>
+{% endblock %}
+

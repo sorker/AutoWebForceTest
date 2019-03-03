@@ -26,8 +26,8 @@
             </button>-->
             <a class="navbar-brand" href="/">自动化测试</a>
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="/project">Projects</a></li>
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="/projects">Projects</a></li>
                 <li><a href="/services">Services</a></li>
                 <li><a href="/downloads">Downloads</a></li>
                 <li><a href="/about">About</a></li>
@@ -44,30 +44,34 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">概述 <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
+                <li><a href="/project">概述 <span class="sr-only">(current)</span></a></li>
+                <li><a href="/reports">Reports</a></li>
+                <li><a href="/analytics">Analytics</a></li>
+                <li><a href="/export">Export</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        {% block projectDetail %}
+            {% block projectDetail %}
 
-        {% endblock %}
+            {% endblock %}
         </div>
     </div>
 </div>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="/static/bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
-<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-<script src="/static/bootstrap/assets/js/vendor/holder.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="/static/bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script type="application/javascript">
+        var currurl = window.location.pathname;
+        currurl = currurl.replace('/', '').replace('/', '');
+        var li_elements = document.getElementsByTagName('li');
+        if (currurl == 'projects') {
+            alert(currurl+li_elements.length);
+            li_elements[1].setAttribute("class", "active");
+            li_elements[5].setAttribute("class", "active");
+        } else if (currurl == 'downloads') {
+            li_elements[3].setAttribute("class", "active");
+        } else if (currurl == 'about') {
+            li_elements[4].setAttribute("class", "active");
+        } else if (currurl == '') {
+            li_elements[0].setAttribute("class", "active");
+        }
+    </script>
 </body>
 </html>

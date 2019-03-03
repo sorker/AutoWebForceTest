@@ -7,8 +7,8 @@ def index(request):
     return render(request, 'index.html')
 
 
-def project(request):
-    return render(request, 'project.html')
+def projects(request):
+    return render(request, 'projects.html')
 
 
 def services(request):
@@ -20,4 +20,4 @@ def downloads(request):
 
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about0.html')
