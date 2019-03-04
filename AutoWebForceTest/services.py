@@ -20,9 +20,9 @@ from AutoActivity.services import sshConnect, sshClose, allTask
 
 def services(request):
     time_data_new = newTestServices()
-    print(time_data_new.get('UsedM') / time_data_new.get('TotalM'))
+    # print(time_data_new.get('UsedM') / time_data_new.get('TotalM'))
     test_services_list = allTestServices()
-    print(test_services_list)
+    # print(test_services_list)
     return render(request, 'services.html', {'time_data_new': time_data_new, 'test_services_list': test_services_list})
 
 

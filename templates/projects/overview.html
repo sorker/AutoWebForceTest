@@ -1,0 +1,170 @@
+<h1 class="page-header">服务器状态</h1>
+<span>80端口连接数:{{ time_data_new.linksNum }}</span>
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="Mem" style="width: 585px; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>内存</h4>
+        <span class="text-muted">总内存：{{ time_data_new.TotalM }}MB</span>
+    </div>
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="Disk" style="width: 585px; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>磁盘</h4>
+        <span class="text-muted">磁盘:{{ time_data_new.HardTotal }}G</span>
+    </div>
+</div>
+
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="CPU" style="width: 585px; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>CPU</h4>
+        <span class="text-muted">CPU:{{ time_data_new.linksNum }}</span>
+    </div>
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="LoadStat" style="width: 585px; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>负载均衡</h4>
+        <span class="text-muted">负载均衡:{{ time_data_new.Theards }}</span>
+    </div>
+</div>
+
+<h2 class="sub-header">服务器web状态：</h2>
+<span>发送流量:{{ time_data_new.ReceiveT }}MB,接收流量:{{ time_data_new.TransmitT }}MB</span>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+            <th>Header</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for test_service in test_services_list %}
+            <tr>
+                {% for k, v in test_service.items %}
+                    <td>{{ v }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% block customjs %}
+    <script type="text/javascript">
+        var UserMem = {{ time_data_new.UsedM }};
+        var MemP = UserMem / {{ time_data_new.TotalM }};
+        var UserDisk = {{ time_data_new.HardUser }};
+        var DiskP = UserDisk / {{ time_data_new.HardTotal }};
+        var LoadStatP = {{ time_data_new.LoadStat }};
+        var Mem = document.getElementById("Mem");
+        var Disk = document.getElementById("Disk");
+        var CPU = document.getElementById("CPU");
+        var LoadStat = document.getElementById("LoadStat");
+        var MemE = echarts.init(Mem, null, {height: 350});
+        var DiskE = echarts.init(Disk, null, {height: 350});
+        var CPUE = echarts.init(CPU, null, {height: 350});
+        var LoadStatE = echarts.init(LoadStat, null, {height: 350});
+        menoption = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '内存使用率',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: (MemP * 100).toFixed(2), name: '使用率:' + UserMem + 'MB'}]
+                }
+            ]
+        };
+        diskoption = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '硬盘使用率',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: (DiskP * 100).toFixed(2), name: '使用率:' + UserDisk + 'G'}]
+                }
+            ]
+        };
+        cpuoption = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: 'CPU使用率',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: (MemP * 100).toFixed(2), name: '使用率'}]
+                }
+            ]
+        };
+        loadstatoption = {
+            tooltip: {
+                formatter: "{a} <br/>{b} : {c}%"
+            },
+            toolbox: {
+                feature: {
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: '负载均衡',
+                    type: 'gauge',
+                    detail: {formatter: '{value}%'},
+                    data: [{value: (LoadStatP * 100).toFixed(2), name: '负载:' + LoadStatP}]
+                }
+            ]
+        };
+
+        {#setInterval(function () {#}
+        {#    option.series[0].data[0].value = (MemP*100).toFixed(2);#}
+        {#    myChart.setOption(option, true);#}
+        {#{, 2000);#}
+
+        if (menoption && typeof menoption === "object") {
+            MemE.setOption(menoption, true);
+            DiskE.setOption(diskoption, true);
+            CPUE.setOption(cpuoption, true);
+            LoadStatE.setOption(loadstatoption, true);
+        }
+    </script>
+{% endblock %}
+
