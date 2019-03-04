@@ -66,7 +66,7 @@ def sshMemInfo(service):
     # Rate_Mem = 100 * Used_Mem / float(MemTotal)
     # print("内存利用率：%.2f " % (100+Rate_Mem) + "%")
     '''
-    return int(MemTotal), int(MemTotal) - int(MemFree)
+    return int(int(MemTotal) / 1024), int((int(MemTotal) - int(MemFree)) / 1024)
 
 def sshDiskInfo(service):
     """磁盘空间监控"""
@@ -207,7 +207,7 @@ def allTask(service):
 
 
 if __name__ in '__main__':
-    service = sshConnect('192.168.100.152', 'root', '123456', '22')
+    service = sshConnect('192.168.94.133', 'root', '123456', '22')
     # """ 端口监控"""
     # ReciveTotal, SendTotal, sshResLists = sshComStr(service)
     # print('总接收流量：', ReciveTotal, '总发送流量：', SendTotal, '端口信息 ：', sshResLists)
