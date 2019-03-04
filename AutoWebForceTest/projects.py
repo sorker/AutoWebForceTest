@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 """
- @time    : 2019/3/4 16:38
+ @time    : 2019/3/3 19:43
  @desc    : this is a desc
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
@@ -16,5 +16,5 @@ from ActivityModel.models import TestService
 from django.shortcuts import render
 
 
-def gauge(request):
-    return render(request, 'example/gauge.html')
+def projects(request):
+    return render(request, 'projects/projects.html')

@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    {% include 'base/statichtml/meta.html' %}
+    {% block custommeta %}
 
-    {% include 'base/css.html' %}
-    <title>Justified Nav Template for Bootstrap</title>
-    {% include 'base/js.html' %}
+{% endblock %}
+    {% include 'base/statichtml/css.html' %}
+    <title>朱少杰2015014140</title>
+    {% include 'base/statichtml/js.html' %}
 </head>
 
 <body style="background-image: url('/static/bootstrap/images/bg.jpg')">

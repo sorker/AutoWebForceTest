@@ -1,13 +1,17 @@
 {% extends "base/base.html" %}
+{% block custommeta %}
+    <meta http-equiv="refresh" content="5">
+{% endblock %}
 {% block navigationBar %}
     {% include "base/navigationBar.html" %}
 {% endblock %}
 {% block indexInfo %}
-     <h1 class="page-header">Dashboard</h1>
+    <h1 class="page-header">Dashboard</h1>
     <div class="row placeholders">
         <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+{#            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="#}
+{#                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">#}
+            <div id="mian" style="width: 300px; height: 300px"></div>
             <h4>Label</h4>
             <span class="text-muted">Something else</span>
         </div>
@@ -30,7 +34,6 @@
             <span class="text-muted">Something else</span>
         </div>
     </div>
-
     <h2 class="sub-header">Section title</h2>
     <div class="table-responsive">
         <table class="table table-striped">
@@ -41,17 +44,61 @@
                 <th>Header</th>
                 <th>Header</th>
                 <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
+                <th>Header</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1,001</td>
-                <td>Lorem</td>
-                <td>ipsum</td>
-                <td>dolor</td>
-                <td>sit</td>
-            </tr>
+            {% for test_service in test_services %}
+                <tr>
+                    {% for k, v in test_service.items %}
+                        <td>{{ v }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% block customjs %}
+        <script type="text/javascript">
+            var dom = document.getElementById("mian");
+            var myChart = echarts.init(dom);
+            var app = {};
+            option = null;
+            option = {
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '业务指标',
+                        type: 'gauge',
+                        detail: {formatter: '{value}%'},
+                        data: [{value: 50, name: '完成率'}]
+                    }
+                ]
+            };
+
+            setInterval(function () {
+                option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+                myChart.setOption(option, true);
+            }, 2000);
+
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+        </script>
+    {% endblock %}
 {% endblock %}

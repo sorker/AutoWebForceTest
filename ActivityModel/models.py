@@ -20,7 +20,7 @@ class UserLogin(models.Model):
     test_login = models.IntegerField(u'测试是否可登录')
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class LoginProblem(models.Model):
@@ -34,7 +34,7 @@ class LoginProblem(models.Model):
     problem_res = models.CharField(u'问题运行结果', max_length=100)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class ProcesssPart(models.Model):
@@ -46,13 +46,14 @@ class ProcesssPart(models.Model):
     site = models.CharField(u'被测试的站点', max_length=20)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class TestService(models.Model):
     id = models.AutoField(primary_key=True)
     site_ip = models.CharField(u'被测试的站点', max_length=20)
     time_data = models.CharField(u'获取的服务器状态', max_length=255)
+    datetime = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)

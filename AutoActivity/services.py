@@ -197,12 +197,12 @@ def allTask(service):
     linksNum = httpLinks(service)
     # print('80端口连接总数:', linksNum)
 
-    ServerInfo = [{'TotalM': TotalM, 'UsedM': UsedM},
-                  {'HardTotal': HardTotal, 'HardUser': HardUser},
-                  {'LoadStat': LoadStat, 'Theards': Theards},
-                  {'ReceiveT': ReceiveT, 'TransmitT': TransmitT},
-                  {'linksNum': linksNum},
-                  ]
+    ServerInfo = {"TotalM": TotalM, "UsedM": UsedM,
+                  "HardTotal": HardTotal, "HardUser": HardUser,
+                  "LoadStat": LoadStat, "Theards": Theards,
+                  "ReceiveT": ReceiveT, "TransmitT": TransmitT,
+                  "linksNum": linksNum,
+                  }
     return ServerInfo
 
 
