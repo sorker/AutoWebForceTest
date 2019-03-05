@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
 import paramiko
 import re
+from time import sleep
 from AutoActivity import configs
 
 LOG_DIR = configs.LOG_DIR
+
 
 def sshConnect(hostname, username, password, port):
     """
@@ -35,17 +37,18 @@ def sshClose(ssh_client):
     # 关闭ssh
     ssh_client.close()
 
+
 def sshMemInfo(service):
     """内存监控"""
-    sshRes = sshCommand(service,  'cat /proc/meminfo')
+    sshRes = sshCommand(service, 'cat /proc/meminfo')
     mem_values = re.findall("(\d+)\ kB", ",".join(sshRes))
-    MemTotal = mem_values[0]    # 总内存
-    MemFree = mem_values[1]     # 空闲内存
-    Buffers = mem_values[2]     # 给文件的缓冲大小
-    Cached = mem_values[3]      # 高速缓冲存储器使用的大小
+    MemTotal = mem_values[0]  # 总内存
+    MemFree = mem_values[1]  # 空闲内存
+    Buffers = mem_values[2]  # 给文件的缓冲大小
+    Cached = mem_values[3]  # 高速缓冲存储器使用的大小
     SwapCached = mem_values[4]  # 被高速缓冲存储用的交换空间大小
     SwapTotal = mem_values[13]  # 交换内存总共
-    SwapFree = mem_values[14]   # 交换内存剩余
+    SwapFree = mem_values[14]  # 交换内存剩余
     '''
     print('******************************内存监控*********************************' )
     print("*******************时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "******************")
@@ -67,6 +70,7 @@ def sshMemInfo(service):
     # print("内存利用率：%.2f " % (100+Rate_Mem) + "%")
     '''
     return int(int(MemTotal) / 1024), int((int(MemTotal) - int(MemFree)) / 1024)
+
 
 def sshDiskInfo(service):
     """磁盘空间监控"""
@@ -99,6 +103,7 @@ def sshDiskInfo(service):
     HardUser = sshResLists[0][2][:-1]
     return HardTotal, HardUser
 
+
 def sshComStr(service):
     """ 端口监控"""
     sshRes = sshCommand(service, 'netstat -tpln')
@@ -126,6 +131,7 @@ def sshComStr(service):
     '''
     return sshResLists
 
+
 def sshLoadStat(service):
     """    负载均衡    """
     sshRes = sshCommand(service, 'cat /proc/loadavg')
@@ -144,6 +150,7 @@ def sshLoadStat(service):
     '''
     return LoadStat, Theards
 
+
 def sshIONetwork(service):
     """    获取网络接口的输入和输出    """
     sshRes = sshCommand(service, 'cat /proc/net/dev')
@@ -160,13 +167,14 @@ def sshIONetwork(service):
         net_io['Receive'] = round(float(line[1].split()[0]) / (1024.0 * 1024.0), 3)
         net_io['Transmit'] = round(float(line[1].split()[8]) / (1024.0 * 1024.0), 3)
         net[eth_name] = net_io
-    ReceiveTotal = 0    # 接收总流量
-    TransmitTotal = 0   # 发送总流量
+    ReceiveTotal = 0  # 接收总流量
+    TransmitTotal = 0  # 发送总流量
     for k, v in net.items():
         if k != 'lo':
             ReceiveTotal += v.get('Receive')
             TransmitTotal += v.get('Transmit')
     return ReceiveTotal, TransmitTotal
+
 
 def httpLinks(service):
     """80端口连接总数"""
@@ -184,6 +192,33 @@ def linuxNode(service):
     return sshResStr
 
 
+def sshCPUInfo(service):
+    sshRes = sshCommand(service, 'cat /proc/stat')
+    child = ''.join(sshRes)
+    sleep(0.1)
+    sshRes = sshCommand(service, 'cat /proc/stat')
+    child1 = ''.join(sshRes)
+    cpus = child.strip().split()
+    cpus1 = child1.strip().split()
+    T1 = int(cpus[1]) + int(cpus[2]) + int(cpus[3]) + int(cpus[4]) + int(cpus[5]) + int(cpus[6]) + int(cpus[8]) + int(
+        cpus[9])
+    T2 = int(cpus1[1]) + int(cpus1[2]) + int(cpus1[3]) + int(cpus1[4]) + int(cpus1[5]) + int(cpus1[6]) + int(
+        cpus1[8]) + int(cpus1[9])
+    Tol = T2 - T1
+    Idle = int(cpus1[4]) - int(cpus[4])
+    '''
+    print('总的cpu时间1:',T1)
+    print('总的cpu时间2:', T2)
+    print('时间间隔内的所有时间片:', Tol)
+    print('计算空闲时间idle:', Idle)
+    print("计算cpu使用率：",100*(Tol-Idle)/Tol,"%")
+    '''
+    CPUP = round(((Tol - Idle) / Tol * 100), 2)
+    if CPUP == 0:
+        return 0
+    return CPUP
+
+
 def allTask(service):
     ServerInfo = []
     TotalM, UsedM = sshMemInfo(service)
@@ -196,12 +231,14 @@ def allTask(service):
     # print('接收总流量：', ReceiveT, 'MB，发送总流量：', TransmitT, 'MB')
     linksNum = httpLinks(service)
     # print('80端口连接总数:', linksNum)
+    CPUP = sshCPUInfo(service)
+    # print('CPU使用率:', CPUInfo, '%')
 
     ServerInfo = {"TotalM": TotalM, "UsedM": UsedM,
                   "HardTotal": HardTotal, "HardUser": HardUser,
                   "LoadStat": LoadStat, "Theards": Theards,
                   "ReceiveT": ReceiveT, "TransmitT": TransmitT,
-                  "linksNum": linksNum,
+                  "linksNum": linksNum, "CPUP": CPUP,
                   }
     return ServerInfo
 
@@ -213,6 +250,7 @@ if __name__ in '__main__':
     # print('总接收流量：', ReciveTotal, '总发送流量：', SendTotal, '端口信息 ：', sshResLists)
 
     args = allTask(service)
+    # args = sshCPUInfo(service)
     print(args)
     # print(linuxNode(service))
     # print('q')

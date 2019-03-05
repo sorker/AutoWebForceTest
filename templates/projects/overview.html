@@ -20,46 +20,21 @@
         <div id="CPU" style="width: 585px; height: 270px" class="img-responsive"
              alt="Generic placeholder thumbnail"></div>
         <h4>CPU</h4>
-        <span class="text-muted">CPU:<span id="CPUM">{{ time_data_new.linksNum }}</span></span>
+{#        <span class="text-muted">CPU:<span id="CPUM">{{ time_data_new.Theards }}</span></span>#}
     </div>
     <div class="col-xs-6 col-sm-6 placeholder">
         <div id="LoadStat" style="width: 585px; height: 270px" class="img-responsive"
              alt="Generic placeholder thumbnail"></div>
         <h4>负载均衡</h4>
-        <span class="text-muted">负载均衡:<span id="Theards">{{ time_data_new.Theards }}</span></span>
+        <span class="text-muted">线程比:<span id="Theards">{{ time_data_new.Theards }}</span></span>
     </div>
 </div>
 
 <h2 class="sub-header">服务器web状态：</h2>
 <span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>
 <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-            <th>Header</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for test_service in test_services_list %}
-            <tr>
-                {% for k, v in test_service.items %}
-                    <td>{{ v }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block chartblock %}
+    {% endblock %}
 </div>
 
 {% block customjs %}
@@ -71,10 +46,7 @@
         var HardUser = {{ time_data_new.HardUser }};
         var DiskP = HardUser / HardTotal;
         var LoadStatP = {{ time_data_new.LoadStat }};
-        var Theards = {{ time_data_new.Theards }};
-        var ReceiveT = {{ time_data_new.ReceiveT }};
-        var TransmitT = {{ time_data_new.TransmitT }};
-        var linksNum ={{ time_data_new.linksNum }};
+        var CPUP = {{ time_data_new.CPUP }};
         var Mem_element = document.getElementById("Mem");
         var Disk_element = document.getElementById("Disk");
         var CPU_element = document.getElementById("CPU");
@@ -82,7 +54,7 @@
         var LoadStat_element = document.getElementById("LoadStat");
         var TotalM_element = document.getElementById("TotalM");
         var HardTotal_element = document.getElementById("HardTotal");
-        var CPUM_element = document.getElementById("CPUM");
+        {#var CPUM_element = document.getElementById("CPUM");#}
         var Theards_element = document.getElementById("Theards");
         var ReceiveT_element = document.getElementById("ReceiveT");
         var TransmitT_element = document.getElementById("TransmitT");
@@ -148,7 +120,7 @@
                         name: 'CPU使用率',
                         type: 'gauge',
                         detail: {formatter: '{value}%'},
-                        data: [{value: (MemP * 100).toFixed(2), name: '使用率'}]
+                        data: [{value: CPUP, name: '使用率:'+ (CPUP/100).toFixed(2)}]
                     }
                 ]
             };                                      // CPU值未获取
@@ -188,9 +160,10 @@
          **/
 
         setInterval(function () {
-            $.getJSON({% url 'services_ajas' %}, function (ret) {
+            $.getJSON({% url 'services_ajax' %}, function (ret) {
                 var time_data_new = ret.time_data_new;
                 var siteIp = time_data_new.site_ip;
+                CPUP = time_data_new.CPUP;
                 UserMem = time_data_new.UsedM;
                 TotalM = time_data_new.TotalM;
                 MemP = UserMem / TotalM;
@@ -198,16 +171,16 @@
                 HardUser = time_data_new.HardUser;
                 DiskP = HardUser / HardTotal;
                 LoadStatP = time_data_new.LoadStat;
-                Theards = time_data_new.Theards;
-                ReceiveT = time_data_new.ReceiveT;
-                TransmitT = time_data_new.TransmitT;
-                linksNum = time_data_new.linksNum;
-                datetime = time_data_new.datetime;
+                var Theards = time_data_new.Theards;
+                var ReceiveT = time_data_new.ReceiveT;
+                var TransmitT = time_data_new.TransmitT;
+                var linksNum = time_data_new.linksNum;
+                {#datetime = time_data_new.datetime;#}
                 gaugeInfo();
                 siteIp_element.innerText = siteIp;
                 TotalM_element.innerText = TotalM;
                 HardTotal_element.innerText = HardTotal;
-                CPUM_element.innerText = linksNum;                      // CPU值未获取
+                {#CPUM_element.innerText = CPUP;                      // CPU值未获取#}
                 Theards_element.innerText = Theards;
                 ReceiveT_element.innerText = ReceiveT;
                 TransmitT_element.innerText = TransmitT;

@@ -80,7 +80,6 @@ def sign(host, DesiredCapabilities, user, pwd, i, MP):
     print('主进程', MP, '下的注册程序', i, '结束运行')
 
 
-
 def signTest(host, DesiredCapabilities, filename, num, MP):
     print('主进程', MP, '开始运行')
     datadeal.usersput(filename, num)

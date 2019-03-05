@@ -25,5 +25,6 @@ urlpatterns = [
     path('downloads/', downloads.downloads),
     path('about/', about.about),
     path('test/', view.gauge),
-    path('services_ajas/', services.services_ajas, name='services_ajas'),
+    path('services_ajax/', services.services_ajax, name='services_ajax'),
+    path('index_site/', index.index_site)
 ]
