@@ -16,6 +16,7 @@ import json
 from ActivityModel.models import TestService
 from django.shortcuts import render
 from AutoActivity.services import sshConnect, sshClose, allTask
+from django.http import JsonResponse
 
 
 def services(request):
@@ -24,6 +25,14 @@ def services(request):
     test_services_list = allTestServices()
     # print(test_services_list)
     return render(request, 'services.html', {'time_data_new': time_data_new, 'test_services_list': test_services_list})
+
+
+def services_ajas(request):
+    time_data_new = newTestServices()
+    # print(time_data_new.get('UsedM') / time_data_new.get('TotalM'))
+    test_services_list = allTestServices()
+    # print(test_services_list)
+    return JsonResponse({'time_data_new': time_data_new, 'test_services_list': test_services_list})
 
 
 def newTestServices():
@@ -35,7 +44,7 @@ def newTestServices():
 
     # 返回最新数据
     test_services = TestService.objects.filter(site_ip='192.168.94.133').order_by('id').reverse()[:1].values()
-    print(test_services)
+    # print(test_services)
     time_data_new = {}
     for test_service in test_services:
         id = test_service.get('id')

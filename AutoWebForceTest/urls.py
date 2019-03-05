@@ -24,5 +24,6 @@ urlpatterns = [
     path('services/', services.services),
     path('downloads/', downloads.downloads),
     path('about/', about.about),
-    path('test/', view.gauge)
+    path('test/', view.gauge),
+    path('services_ajas/', services.services_ajas, name='services_ajas'),
 ]
