@@ -7,31 +7,47 @@
         <h1>Web 自动化测试</h1>
         <p class="lead">对目前而言，企业在web测试中使用最多的还是人工测试。相比重复繁琐的工作，机器自动化测试对企业的利益更有帮助，在使用中更占优势。</p>
 
-        <form class="form-inline" action="/index_site" method="post">
+        <form class="form-inline">
             {% csrf_token %}
             <div class="form-group" style="width: 49%; height: 45px">
                 <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                <input type="text" class="form-control" style="width: 100%; height: 100%" id="exampleInputEmail3" placeholder="http://www.baidu.com/" name="site_ip">
+                <input type="text" class="form-control" style="width: 100%; height: 100%" id="exampleInputEmail3"
+                       placeholder="http://www.baidu.com/" name="site_ip">
             </div>
             <div class="form-group" style="width: 49%; height: 45px">
                 <label class="sr-only" for="exampleInputPassword3">Password</label>
-                <input type="text" class="form-control" style="width: 100%; height: 100%" id="exampleInputPassword3" placeholder="127.0.0.1;username;password;port" name="service_info">
+                <input type="text" class="form-control" style="width: 100%; height: 100%" id="exampleInputPassword3"
+                       placeholder="127.0.0.1;username;password;port" name="service_info">
             </div>
-               <p style="padding-top: 20px; height: 50px"><a id="sign_in" class="btn btn-lg btn-success">GET START</a></p>
+            <p></p>
+            <span id="result" style="float: right; color: #FF0000"></span>
+            <p style="padding-top: 20px; height: 50px"><a id="sign_in" class="btn btn-lg btn-success">GET START</a></p>
         </form>
     </div>
     {% block customjs %}
         <script type="application/javascript">
-        $(document).ready(function(){
-            $('#sign_in').click(function(){
-                var site_ip = $("input[name='site_ip']").val();
-                var service_info = $("input[name='service_info']").val();
-                $.get({% url 'index_site' %}, {'site_ip': site_ip, 'service_info': service_info}, function(ret) {
-                    var site_ip = ret.site_ip;
-                        alert(site_ip);
+            $(document).ready(function () {
+                $('#sign_in').click(function () {
+                    var site_ip = $("input[name='site_ip']").val();
+                    var service_info = $("input[name='service_info']").val();
+                    $.ajax({
+                        url: 'index_site/',
+                        type: 'POST',
+                        data: {
+                            site_ip: site_ip,
+                            service_info: service_info
+                        },
+                        headers: {"X-CSRFToken": $.cookie('csrftoken')},
+                        success: function (res) {
+                            if ('success' === res.message) {
+                                window.location.href = 'projects/analytics'
+                            } else {
+                                $('#result').html(res.message);
+                            }
+                        }
+                    })
                 });
             });
-        });
         </script>
     {% endblock %}
 {% endblock %}

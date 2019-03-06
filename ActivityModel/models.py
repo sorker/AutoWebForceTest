@@ -53,11 +53,11 @@ class TestService(models.Model):
 
 class SiteServices(models.Model):
     id = models.AutoField(primary_key=True)
-    site_ip = models.CharField(u'被测试的站点', max_length=20)
-    service_ip = models.CharField(u'服务器ip', max_length=20)
-    service_username = models.CharField(u'服务器用户名', max_length=20)
-    service_pwd = models.CharField(u'服务器密码', max_length=20)  # 60分钟后删除
-    service_port = models.CharField(u'服务器端口', max_length=20)
+    site_ip = models.CharField(u'被测试的站点', max_length=80)
+    service_ip = models.CharField(u'服务器ip', max_length=50)
+    service_username = models.CharField(u'服务器用户名', max_length=50)
+    service_pwd = models.CharField(u'服务器密码', max_length=50)  # 60分钟后删除
+    service_port = models.CharField(u'服务器端口', max_length=50)
     use_datetime = models.DateTimeField(auto_now=True)
 
     def __str__(self):

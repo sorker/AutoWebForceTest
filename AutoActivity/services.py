@@ -22,7 +22,7 @@ def sshConnect(hostname, username, password, port):
         ssh_client.connect(hostname, port, username, password)
     except Exception as e:
         print("SSH链接失败：[hostname:%s];[username:%s];[error:%s]" % (hostname, username, e))
-        exit()
+        ssh_client = False
     return ssh_client
 
 

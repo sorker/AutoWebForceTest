@@ -18,3 +18,7 @@ from django.shortcuts import render
 
 def gauge(request):
     return render(request, 'example/gauge.html')
+
+
+def tooltip(request):
+    return  render(request, 'base/tooltip-view.html')

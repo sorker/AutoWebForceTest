@@ -31,7 +31,7 @@ def services_ajax(request):
 
 
 def siteServices():
-    site_services = SiteServices.objects.filter(service_ip='192.168.94.133').order_by('id').reverse()[:1].values()
+    site_services = SiteServices.objects.filter(service_ip='192.168.94.133').order_by('id').reverse()[:1].values()  # ip需要传递
     for site_service in site_services:
         service_ip = site_service.get('service_ip')
         service_username = site_service.get('service_username')

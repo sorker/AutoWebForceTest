@@ -14,46 +14,54 @@ django.setup()
 
 import time
 import json
-from ActivityModel.models import TestService
+from ActivityModel.models import TestService, SiteServices
 from django.shortcuts import render
 from AutoActivity.services import sshConnect, sshClose, allTask
 
 
 def projects(request):
-    time_data_new = newTestServices()
-    print(time_data_new.get('UsedM') / time_data_new.get('TotalM'))
-    test_services_list = allTestServices()
-    print(test_services_list)
+    time_data_new, test_services_list = siteServices()
     return render(request, 'projects.html', {'time_data_new': time_data_new, 'test_services_list': test_services_list})
 
 
-def newTestServices():
+def siteServices():
+    site_services = SiteServices.objects.filter(service_ip='192.168.94.133').order_by('id').reverse()[:1].values()  # ip需要传递
+    for site_service in site_services:
+        service_ip = site_service.get('service_ip')
+        service_username = site_service.get('service_username')
+        service_pwd = site_service.get('service_pwd')
+        service_port = site_service.get('service_port')
+        use_datetime = site_service.get('use_datetime')
+        time_data_new = newTestServices(service_ip, service_username, service_pwd, service_port)
+        test_services_list = allTestServices(service_ip)
+    return time_data_new,test_services_list
+
+
+def newTestServices(service_ip, service_username, service_pwd, service_port):
     # # 获取最新的系统数据并写入数据库
-    service = sshConnect('192.168.94.133', 'root', '123456', '22')
+    service = sshConnect(service_ip, service_username, service_pwd, service_port)
     args = allTask(service)
-    TestService.objects.create(site_ip='192.168.94.133', time_data=str(args))
+    TestService.objects.create(site_ip=service_ip, time_data=str(args))
     sshClose(service)
 
     # 返回最新数据
-    test_services = TestService.objects.filter(site_ip='192.168.94.133').order_by('id').reverse()[:1].values()
-    print(test_services)
+    test_services = TestService.objects.filter(site_ip=service_ip).order_by('id').reverse()[:1].values()
+    # print(test_services)
     time_data_new = {}
     for test_service in test_services:
         id = test_service.get('id')
         site_ip = test_service.get('site_ip')
         time_data = json.loads(test_service.get('time_data').replace('\'', '\"'))
         datetime = test_service.get('datetime')
-        time_data_new.update({"id": id, "site_ip": site_ip, "datetime": datetime})
+        time_data_new.update({"id": id, "site_ip": site_ip})
         time_data_new.update(time_data)
+        time_data_new.update({"datetime": datetime})
     return time_data_new
 
 
-def allTestServices():
-    count = TestService.objects.count()
-    # if count - 50 >= 0:
-    test_services = TestService.objects.filter(site_ip='192.168.94.133').order_by('id').reverse()[:30].values()
-    # else:
-    # test_services = TestService.objects.filter(site_ip='192.168.94.133')[:count].values()
+def allTestServices(service_ip):
+    # 返回最新的30条数据
+    test_services = TestService.objects.filter(site_ip=service_ip).order_by('id').reverse()[:30].values()
     test_services_list = []
     for test_service in test_services:
         time_data_new = {}
@@ -61,8 +69,9 @@ def allTestServices():
         site_ip = test_service.get('site_ip')
         time_data = json.loads(test_service.get('time_data').replace('\'', '\"'))
         datetime = test_service.get('datetime')
-        time_data_new.update({"id": id, "site_ip": site_ip, "datetime": datetime})
+        time_data_new.update({"id": id, "site_ip": site_ip})
         time_data_new.update(time_data)
+        time_data_new.update({"datetime": datetime})
         test_services_list.append(time_data_new)
     return test_services_list
 
