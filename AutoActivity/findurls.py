@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 寻找目标站点的url,可设置查找深度
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import requests
 import time
 from selenium import webdriver
@@ -21,7 +27,7 @@ def site_urls(driver, url):
                 useful_urls.append(new_url)
     return useful_urls
 
-
+# 获取一定深度的站点页面
 def all_urls_deep(driver, url, deep):
     urls = [url]  # 所有页面集合
     deeps = [0]

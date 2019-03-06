@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import index, about, projects, project, services, downloads, view
+from ActivityModel import index, downloads, about, project, view, services, projects
 
 urlpatterns = [
     path('admin/', admin.site.urls),

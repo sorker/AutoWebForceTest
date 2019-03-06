@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
+from django.conf.global_settings import SESSION_COOKIE_NAME, SESSION_COOKIE_PATH
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)--当前文件夹所在的目录
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -73,6 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AutoWebForceTest.wsgi.application'
 
+# Session_Cookies
+SESSION_COOKIE_AGE = 10800                            # Session的cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
+CSRF_COOKIE_AGE = 10800                               # cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

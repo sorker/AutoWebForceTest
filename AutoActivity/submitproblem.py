@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 """
  @time    : 2019/2/20 15:32
- @desc    : this is a desc
+ @desc    : 针对毕业设计站点:http://zwu.hustoj.com的操作类
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """

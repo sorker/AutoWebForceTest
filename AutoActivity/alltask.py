@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 """
  @time    : 2019/2/20 13:12
- @desc    : this is a desc
+ @desc    : 多线程测试
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """

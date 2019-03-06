@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 所有与服务器的ssh通讯
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import paramiko
 import re
 from time import sleep

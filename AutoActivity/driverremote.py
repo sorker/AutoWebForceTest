@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 浏览器驱动
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 from selenium.webdriver import Remote
 from selenium import webdriver
 from AutoActivity import configs

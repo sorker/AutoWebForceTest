@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 基础配置文档
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import os
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities as DC
 

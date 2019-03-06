@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 用户名文件的创建和获取
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import xlrd
 import xlwt
 import os

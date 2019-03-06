@@ -1,3 +1,9 @@
+"""
+ @time    : 2019/2/20 15:32
+ @desc    : 单元测试类
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import unittest
 from time import sleep
 from selenium import webdriver

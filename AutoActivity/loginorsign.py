@@ -1,4 +1,10 @@
 # -*- coding:utf-8 -*-
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 登陆\注册方法
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 from selenium import webdriver
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from time import time

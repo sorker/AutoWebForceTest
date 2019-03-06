@@ -20,7 +20,7 @@
                        placeholder="127.0.0.1;username;password;port" name="service_info">
             </div>
             <p></p>
-            <span id="result" style="float: right; color: #FF0000"></span>
+            <span id="result" style="float: right; color: #FF0000">{% if msg %}{{ msg }}{% endif %}</span>
             <p style="padding-top: 20px; height: 50px"><a id="sign_in" class="btn btn-lg btn-success">GET START</a></p>
         </form>
     </div>
@@ -40,7 +40,8 @@
                         headers: {"X-CSRFToken": $.cookie('csrftoken')},
                         success: function (res) {
                             if ('success' === res.message) {
-                                window.location.href = 'projects/analytics'
+                                window.location.href = 'projects/';
+                                console.log(res.message)
                             } else {
                                 $('#result').html(res.message);
                             }
