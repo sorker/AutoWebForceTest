@@ -34,7 +34,7 @@ def login(driver, url, user, pwd):
         username.send_keys(user)
         password.send_keys(pwd)
         submit.click()
-        driver.get('http://zwu.hustoj.com')  # 登陆后回到主页
+        driver.get('http://' + url.split('/')[2])  # 登陆后回到主页
         return 'login: success'
     except UnexpectedAlertPresentException:
         # print(e.msg)

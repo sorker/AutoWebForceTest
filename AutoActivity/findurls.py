@@ -40,10 +40,13 @@ def all_urls_deep(driver, url, deep):
             deeps[i] += 1
         #     u_ds = {k: deeps[i]}
         # print(u_ds)  # 打印已遍历深度
-    end = time.time()
     return urls
 
 
-if __name__ in '__main':
-    print(site_urls(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/'))
-    print(all_urls_deep(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/discuss3/thread.php?tid=28', deep=2))
+if __name__ == '__main__':
+    print('4')
+    # onepage = site_urls(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/')
+    allpage = all_urls_deep(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/', deep=1)
+    # print(onepage)
+    print(allpage)
+    print(len(allpage))

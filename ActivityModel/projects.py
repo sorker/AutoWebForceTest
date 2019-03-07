@@ -5,11 +5,8 @@
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """
-
-import time
-import json
 from django.shortcuts import render, redirect
-from AutoActivity.mysqldeal import siteServices
+from AutoActivity.mysqldeal import sqlgettestServices
 
 
 def projects(request):
@@ -17,7 +14,7 @@ def projects(request):
         site_ip_session = request.session['site_ip']
         site_ip_cookies = request.COOKIES.get('site_ip')
         if site_ip_session == site_ip_cookies:  # 存在session和cookies相等
-            time_data_new, test_services_list = siteServices(request)
+            time_data_new, test_services_list = sqlgettestServices(request)
             return render(request, 'projects.html',
                           {'time_data_new': time_data_new, 'test_services_list': test_services_list})
         else:

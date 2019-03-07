@@ -17,7 +17,7 @@ from ActivityModel.models import TestService, SiteServices
 from AutoActivity.services import sshConnect
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators import csrf
+from AutoActivity.mysqldeal import sqlsetSiteServices
 """
  @time    : 2019/2/20 15:32
  @desc    : 返回downloads.html的类
@@ -52,9 +52,7 @@ def index_site(request):
                     code = requests.get(site_ip).status_code
                     if code == 200:
                         message = 'success'
-                        SiteServices.objects.create(site_ip=site_ip, service_ip=service_ip,
-                                                    service_username=service_username, service_pwd=service_pwd,
-                                                    service_port=service_port)
+                        sqlsetSiteServices(site_ip, service_ip, service_username, service_pwd, service_port)
                         request.session.update({'site_ip': site_ip, 'service_ip': service_ip,
                                                 'service_username': service_username, 'service_pwd': service_pwd,
                                                 'service_port': service_port})

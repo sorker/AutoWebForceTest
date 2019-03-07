@@ -1,0 +1,2 @@
+DEB [20190307-14:34:56.868] thr=1   paramiko.transport: EOF in transport thread
+DEB [20190307-14:34:56.869] thr=3   paramiko.transport: EOF in transport thread

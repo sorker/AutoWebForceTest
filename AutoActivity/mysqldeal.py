@@ -13,22 +13,22 @@ django.setup()
 
 import json
 from AutoActivity.services import sshConnect, sshClose, allTask
-from ActivityModel.models import TestService, SiteServices
+from ActivityModel.models import TestService, UserLogin, SiteServices, ProcesssPart
 
 
-def siteServices(request):
+def sqlgettestServices(request):
     """service.py和projects.py的数据库操作"""
     site_ip = request.session['site_ip']
     service_ip = request.session['service_ip']
     service_username = request.session['service_username']
     service_pwd = request.session['service_pwd']
     service_port = request.session['service_port']
-    time_data_new = newTestServices(site_ip, service_ip, service_username, service_pwd, service_port)
-    test_services_list = allTestServices(site_ip)
+    time_data_new = getsetnewTestServices(site_ip, service_ip, service_username, service_pwd, service_port)
+    test_services_list = getallTestServices(site_ip)
     return time_data_new, test_services_list
 
 
-def newTestServices(site_ip, service_ip, service_username, service_pwd, service_port):
+def getsetnewTestServices(site_ip, service_ip, service_username, service_pwd, service_port):
     """service.py和projects.py的数据库操作"""
     # # 获取最新的系统数据并写入数据库
     service = sshConnect(service_ip, service_username, service_pwd, service_port)
@@ -51,7 +51,7 @@ def newTestServices(site_ip, service_ip, service_username, service_pwd, service_
     return time_data_new
 
 
-def allTestServices(site_ip):
+def getallTestServices(site_ip):
     """service.py和projects.py的数据库操作"""
     # 返回最新的30条数据
     test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse()[:30].values()
@@ -70,6 +70,41 @@ def allTestServices(site_ip):
     return test_services_list
 
 
+def sqlsetSiteServices(site_ip, service_ip, service_username, service_pwd, service_port):
+    SiteServices.objects.create(site_ip=site_ip, service_ip=service_ip,
+                                service_username=service_username, service_pwd=service_pwd,
+                                service_port=service_port)
+
+
+def sqlsetSignAccout(site_ip, username, password, test_sign):
+    try:
+        signacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
+        signacc.test_sign = test_sign
+        signacc.save()
+    except UserLogin.DoesNotExist:
+        UserLogin.objects.create(site_ip=site_ip, username=username, password=password, test_sign=test_sign,
+                                 test_login=0)
+
+
+def sqlsetLoginAccout(site_ip, username, password, test_login):
+    try:
+        loginacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
+        loginacc.test_login = test_login
+        loginacc.save()
+    except UserLogin.DoesNotExist:
+        UserLogin.objects.create(site_ip=site_ip, username=username, password=password, test_sign=0,
+                                 test_login=1)
+
+
+def sqlgetSeachAccount(site_ip, test_login):
+    allAccount = UserLogin.objects.filter(site_ip=site_ip, test_login=test_login)
+    return allAccount
+
+
+def sqlsetProcesssPart(main_process,strecondary_process,from_process,site_ip,start_end_time):
+    ProcesssPart.objects.create(main_process=main_process,strecondary_process=strecondary_process,from_process=from_process,site_ip=site_ip,start_end_time=start_end_time)
+
+
 if __name__ == '__main__':
     # print(allTestServices('23'))
-    print(siteServices('http://zwu.hustoj.com/', '192.168.94.133'))
+    print(sqltestServices('http://zwu.hustoj.com/', '192.168.94.133'))
