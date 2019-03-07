@@ -23,7 +23,7 @@ DEFAULT_ANSWER = '#include <stdio.h>\n' \
                  '{\nint a,b;' \
                  '\nscanf("%d %d",&a, &b);\n' \
                  'printf("%d\\n",a+b);\n' \
-                 'return 0\n' \
+                 'return 0;\n' \
                  '}'
 
 
@@ -36,10 +36,11 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
     """
     username = driver.find_element_by_id('profile')   # 验证是否登陆
     if username.text == '登录':
-        loginorsign.login(driver=driver, user=user, pwd=pwd)
+        url = 'http://zwu.hustoj.com/loginpage.php'
+        loginorsign.login(driver=driver, url=url, user=user, pwd=pwd)
     driver.get('http://zwu.hustoj.com/problem.php?id=' + problem_id)
     driver.find_element_by_link_text('提交').click()
-    sleep(0.4)
+    sleep(1)
     frame_element = driver.find_element_by_id('frame_source')
     driver.switch_to.frame(frame_element)
     driver.find_element_by_id('textarea').send_keys(answer)
@@ -53,7 +54,10 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
             sleep(0.8)
             message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
     except NoSuchElementException:
-        message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/a')
+        try:
+            message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/a')
+        except NoSuchElementException:
+            message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
     except Exception as e:
         return '获取结果超时, erroe %s' % e
     message = message_element.text

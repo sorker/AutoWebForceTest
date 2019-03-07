@@ -1,11 +1,21 @@
 # -*- coding:utf-8 -*-
 """
  @time    : 2019/3/1 14:11
- @desc    : this is a desc
+ @desc    : 自定义报错
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """
 
-class defaultError(Exception):
+class loginError(Exception):
+    def __init__(self, *args):
+        self.args = args
+
+
+class problemError(Exception):
+    def __init__(self, *args):
+        self.args = args
+
+
+class signError(Exception):
     def __init__(self, *args):
         self.args = args

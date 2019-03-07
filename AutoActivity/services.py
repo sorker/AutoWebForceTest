@@ -250,13 +250,13 @@ def allTask(service):
 
 
 if __name__ in '__main__':
-    service = sshConnect('192.168.94.133', 'root', '123456', '22')
+    # service = sshConnect('192.168.94.133', 'root', '123456', '22')
+    service = sshConnect('207.148.82.42', 'root', '.aV6AvL]MhF$r*=7', '29')
     # """ 端口监控"""
     # ReciveTotal, SendTotal, sshResLists = sshComStr(service)
     # print('总接收流量：', ReciveTotal, '总发送流量：', SendTotal, '端口信息 ：', sshResLists)
 
     args = allTask(service)
-    # args = sshCPUInfo(service)
     print(args)
     # print(linuxNode(service))
     # print('q')
