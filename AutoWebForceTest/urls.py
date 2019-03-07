@@ -25,7 +25,7 @@ urlpatterns = [
     path('projects/', projects.projects),
     path('projects/analytics/', project.analytice),
     path('projects/export/', project.export),
-    path('projects/report/', project.report),
+    path('projects/reports/', project.reports),
 
     path('services/', services.services),
     path('services_ajax/', services.services_ajax, name='services_ajax'),

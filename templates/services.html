@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% block custommeta %}
-{#    <meta http-equiv="refresh" content="600">#}
+    {#    <meta http-equiv="refresh" content="600">#}
 {% endblock %}
 {% block navigationBar %}
     {% include "base/navigationBar.html" %}
@@ -16,34 +16,34 @@
     {% include 'projects/overview.html' %}
     {% block chartblock %}
         <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>ip</th>
-            <th>总内存MB</th>
-            <th>使用内存MB</th>
-            <th>磁盘容量G</th>
-            <th>已用磁盘G</th>
-            <th>负载均衡%</th>
-            <th>线程比</th>
-            <th>接收数据MB</th>
-            <th>发送数据MB</th>
-            <th>80端口连接数</th>
-            <th>CPU使用%</th>
-            <th>获取时间</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for test_service in test_services_list %}
+            <thead>
             <tr>
-                {% for k, v in test_service.items %}
-                    <td>{{ v }}</td>
-                {% endfor %}
+                <th>#</th>
+                <th>ip</th>
+                <th>总内存MB</th>
+                <th>使用内存MB</th>
+                <th>磁盘容量G</th>
+                <th>已用磁盘G</th>
+                <th>负载均衡%</th>
+                <th>线程比</th>
+                <th>接收数据MB</th>
+                <th>发送数据MB</th>
+                <th>80端口连接数</th>
+                <th>CPU使用%</th>
+                <th>获取时间</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% endblock %}
+            </thead>
 
+            <tbody>
+            {% for test_service in test_services_list %}
+                <tr>
+                    {% for k, v in test_service.items %}
+                        <td>{{ v }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endblock %}
 {% endblock %}

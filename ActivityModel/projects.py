@@ -8,17 +8,19 @@
 
 import time
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from AutoActivity.mysqldeal import siteServices
 
 
 def projects(request):
-    site_ip_session = request.session['site_ip']
-    site_ip_cookies = request.COOKIES.get('site_ip')
-    if site_ip_session == site_ip_cookies:  # 存在session和cookies相等
-        time_data_new, test_services_list = siteServices(request)
-        return render(request, 'projects.html',
-                      {'time_data_new': time_data_new, 'test_services_list': test_services_list})
-    else:
-        msg = '未设置域名和服务器内容'
-        return render(request, 'index.html', {'msg': msg})
+    try:
+        site_ip_session = request.session['site_ip']
+        site_ip_cookies = request.COOKIES.get('site_ip')
+        if site_ip_session == site_ip_cookies:  # 存在session和cookies相等
+            time_data_new, test_services_list = siteServices(request)
+            return render(request, 'projects.html',
+                          {'time_data_new': time_data_new, 'test_services_list': test_services_list})
+        else:
+            return redirect('/?msg=未设置域名和服务器内容')
+    except KeyError:
+        return redirect('/?msg=未设置域名和服务器内容')

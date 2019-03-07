@@ -30,5 +30,5 @@ def export(request):
     return render(request, 'projects/export.html')
 
 
-def report(request):
+def reports(request):
     return render(request, 'projects/reports.html')

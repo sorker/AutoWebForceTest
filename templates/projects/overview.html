@@ -20,7 +20,7 @@
         <div id="CPU" style="width: 100%; height: 270px" class="img-responsive"
              alt="Generic placeholder thumbnail"></div>
         <h4>CPU</h4>
-{#        <span class="text-muted">CPU:<span id="CPUM">{{ time_data_new.Theards }}</span></span>#}
+        {#        <span class="text-muted">CPU:<span id="CPUM">{{ time_data_new.Theards }}</span></span>#}
     </div>
     <div class="col-xs-6 col-sm-6 placeholder">
         <div id="LoadStat" style="width: 100%; height: 270px" class="img-responsive"
@@ -31,9 +31,10 @@
 </div>
 
 <h2 class="sub-header">服务器web状态：</h2>
-<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>
+<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span
+        id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>
 <div class="table-responsive">
-{% block chartblock %}
+    {% block chartblock %}
     {% endblock %}
 </div>
 
@@ -120,7 +121,7 @@
                         name: 'CPU使用率',
                         type: 'gauge',
                         detail: {formatter: '{value}%'},
-                        data: [{value: CPUP, name: '使用率:'+ (CPUP/100).toFixed(2)}]
+                        data: [{value: CPUP, name: '使用率:' + (CPUP / 100).toFixed(2)}]
                     }
                 ]
             };                                      // CPU值未获取

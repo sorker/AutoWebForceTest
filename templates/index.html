@@ -26,6 +26,24 @@
     </div>
     {% block customjs %}
         <script type="application/javascript">
+            function getRequest(name) {
+                var url = window.location.search; //获取url中"?"符后的字串
+                var theRequest = {};
+                if (url.indexOf("?") != -1) {
+                    var str = url.substr(1);
+                    strs = str.split("&");
+                    for (var i = 0; i < strs.length; i++) {
+                        //就是这句的问题
+                        theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                        //之前用了unescape()
+                        //才会出现乱码
+                    }
+                }
+                return theRequest[name];
+            }
+            if (getRequest('msg')) {
+                $('#result').html(getRequest('msg'));
+            }
             $(document).ready(function () {
                 $('#sign_in').click(function () {
                     var site_ip = $("input[name='site_ip']").val();
