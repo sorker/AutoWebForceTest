@@ -21,8 +21,9 @@ class LoginProblem(models.Model):
     password = models.CharField(u'已测试的密码', max_length=100)
     login_status = models.IntegerField(u'登录状态')
     problem_id = models.IntegerField(u'问题id', default=1000)
-    problem_status = models.SmallIntegerField(u'问题运行状态')
     problem_res = models.CharField(u'问题运行结果', max_length=100)
+    start_end_time = models.IntegerField(u'测试用时')
+    datetime = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.id)
@@ -47,6 +48,7 @@ class TestService(models.Model):
     def __str__(self):
         return str(self.site_ip)
 
+
 class SiteServices(models.Model):
     site_ip = models.CharField(u'被测试的站点', max_length=80)
     service_ip = models.CharField(u'服务器ip', max_length=100)
@@ -54,6 +56,18 @@ class SiteServices(models.Model):
     service_pwd = models.CharField(u'服务器密码', max_length=100)  # 60分钟后删除
     service_port = models.CharField(u'服务器端口', max_length=100)
     use_datetime = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.site_ip)
+
+
+class ForceTime(models.Model):
+    site_ip = models.CharField(u'被测试的站点', max_length=80)
+    username = models.CharField(u'已测试的用户名', max_length=100)
+    password = models.CharField(u'已测试的密码', max_length=100)
+    login_status = models.IntegerField(u'登录状态')
+    urls_len = models.IntegerField(u'测试的网站数量')
+    start_end_time = models.IntegerField(u'测试用时')
 
     def __str__(self):
         return str(self.site_ip)

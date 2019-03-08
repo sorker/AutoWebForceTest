@@ -13,7 +13,7 @@ django.setup()
 
 import json
 from AutoActivity.services import sshConnect, sshClose, allTask
-from ActivityModel.models import TestService, UserLogin, SiteServices, ProcesssPart
+from ActivityModel.models import TestService, UserLogin, SiteServices, ProcesssPart, LoginProblem, ForceTime
 
 
 def sqlgettestServices(request):
@@ -101,10 +101,23 @@ def sqlgetSeachAccount(site_ip, test_login):
     return allAccount
 
 
-def sqlsetProcesssPart(main_process,strecondary_process,from_process,site_ip,start_end_time):
-    ProcesssPart.objects.create(main_process=main_process,strecondary_process=strecondary_process,from_process=from_process,site_ip=site_ip,start_end_time=start_end_time)
+def sqlsetProcesssPart(main_process, strecondary_process, from_process, site_ip, start_end_time):
+    ProcesssPart.objects.create(main_process=main_process, strecondary_process=strecondary_process,
+                                from_process=from_process, site_ip=site_ip, start_end_time=start_end_time)
+
+
+def sqlsetLoginProblem(site_ip, username, password, login_status, problem_id, problem_res,
+                       start_end_time):
+    LoginProblem.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
+                                problem_id=problem_id, problem_res=problem_res, start_end_time=start_end_time)
+
+
+def sqlsetForceTime(site_ip, username, password, login_status, urls_len, start_end_time):
+    ForceTime.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
+                             urls_len=urls_len, start_end_time=start_end_time)
 
 
 if __name__ == '__main__':
     # print(allTestServices('23'))
-    print(sqltestServices('http://zwu.hustoj.com/', '192.168.94.133'))
+    # print(sqltestServices('http://zwu.hustoj.com/', '192.168.94.133'))
+    print('1')
