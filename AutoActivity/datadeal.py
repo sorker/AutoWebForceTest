@@ -24,7 +24,7 @@ def usersput(filename, num):
     """
     try:
         filename = os.path.join(DATA_DIR, filename)
-        if not os.path.isfile(filename):  # 判断文件夹是否存在，如果不存在就创建一个
+        if not os.path.isfile(filename):  # 判断文件是否存在，如果不存在就创建一个
             open(filename, 'w')
             workbook = xlwt.Workbook()
             sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
@@ -38,9 +38,9 @@ def usersput(filename, num):
             # print('已生成有' + str(num) + '个用户的excle文件')
             return 'success'
         else:
-            return 'fail-1'
+            return '文件已存在，请更换名字'
     except Exception as e:
-        return 'fail-2, error: %s' % e
+        return '文件生成错误, error: %s' % e
 
 
 # 读取xls的用户名密码并生成字典
