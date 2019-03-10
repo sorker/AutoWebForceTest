@@ -76,14 +76,15 @@ def sqlsetSiteServices(site_ip, service_ip, service_username, service_pwd, servi
                                 service_port=service_port)
 
 
-def sqlsetSignAccout(site_ip, username, password, test_sign):
+def sqlsetSignAccout(site_ip, username, password, test_sign, test_login):
     try:
         signacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
         signacc.test_sign = test_sign
+        signacc.test_login = test_login
         signacc.save()
     except UserLogin.DoesNotExist:
         UserLogin.objects.create(site_ip=site_ip, username=username, password=password, test_sign=test_sign,
-                                 test_login=0)
+                                 test_login=test_login)
 
 
 def sqlsetLoginAccout(site_ip, username, password, test_login):

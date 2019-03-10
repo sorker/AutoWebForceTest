@@ -21,7 +21,7 @@ class LoginProblem(models.Model):
     password = models.CharField(u'已测试的密码', max_length=100)
     login_status = models.IntegerField(u'登录状态')
     problem_id = models.IntegerField(u'问题id', default=1000)
-    problem_res = models.CharField(u'问题运行结果', max_length=100)
+    problem_res = models.CharField(u'问题运行结果', max_length=200)
     start_end_time = models.IntegerField(u'测试用时')
     datetime = models.DateTimeField(auto_now=True)
 

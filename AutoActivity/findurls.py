@@ -46,7 +46,7 @@ def all_urls_deep(driver, url, deep):
 
 if __name__ == '__main__':
     # onepage = site_urls(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/')
-    allpage = all_urls_deep(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/', deep=1)
+    allpage = all_urls_deep(driver=webdriver.Chrome(), url='http://zwu.hustoj.com/', deep=2)
     # print(onepage)
     print(allpage)
     print(len(allpage))

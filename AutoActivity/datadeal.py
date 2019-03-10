@@ -36,7 +36,7 @@ def usersput(filename, num):
                 sheet1.write(i + 1, 1, user_pwd)
             workbook.save(filename)
             # print('已生成有' + str(num) + '个用户的excle文件')
-            return 'success'
+            return '账号密码文件生成成功，请到下载页面下载'
         else:
             return '文件已存在，请更换名字'
     except Exception as e:
