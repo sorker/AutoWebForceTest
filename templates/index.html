@@ -41,6 +41,7 @@
                 }
                 return theRequest[name];
             }
+
             if (getRequest('msg')) {
                 $('#result').html(getRequest('msg'));
             }
@@ -56,6 +57,10 @@
                             service_info: service_info
                         },
                         headers: {"X-CSRFToken": $.cookie('csrftoken')},
+                        beforeSend: function () {
+                            // 禁用按钮防止重复提交
+                            $('#result').html('正在连接测试，请稍等......');
+                        },
                         success: function (res) {
                             if ('success' === res.message) {
                                 window.location.href = 'projects/';

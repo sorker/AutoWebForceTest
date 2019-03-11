@@ -23,6 +23,7 @@ urlpatterns = [
     path('index_site/', index.index_site, name='index_site'),
 
     path('projects/', projects.projects),
+    path('projects/test_sign/', projects.test_sign),
     path('projects/analytics/', project.analytice),
     path('projects/export/', project.export),
     path('projects/reports/', project.reports),

@@ -6,7 +6,7 @@
  @Email   : sorker0129@hotmail.com
 """
 
-from AutoActivity.mysqldeal import sqlgettestServices
+from AutoActivity.mysqldeal import getTestServices
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
@@ -16,8 +16,8 @@ def services(request):
         site_ip_session = request.session['site_ip']
         site_ip_cookies = request.COOKIES.get('site_ip')
         if site_ip_session == site_ip_cookies:  # 存在session和cookies相等
-            time_data_new, test_services_list = sqlgettestServices(request)
-            print(time_data_new, test_services_list )
+            time_data_new, test_services_list = getTestServices(request)
+            # print(time_data_new, test_services_list)
             return render(request, 'services.html',
                           {'time_data_new': time_data_new, 'test_services_list': test_services_list})
         else:
@@ -27,7 +27,7 @@ def services(request):
 
 
 def services_ajax(request):
-    time_data_new, test_services_list = sqlgettestServices(request)
+    time_data_new, test_services_list = getTestServices(request)
     # print(test_services_list)
     return JsonResponse({'time_data_new': time_data_new, 'test_services_list': test_services_list})
 

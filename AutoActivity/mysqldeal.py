@@ -13,10 +13,10 @@ django.setup()
 
 import json
 from AutoActivity.services import sshConnect, sshClose, allTask
-from ActivityModel.models import TestService, UserLogin, SiteServices, ProcesssPart, LoginProblem, ForceTime
+from ActivityModel.models import TestService, UserLogin, SiteServices, ProcesssPart, LoginProblem, ForceTime, FilePath
 
 
-def sqlgettestServices(request):
+def getTestServices(request):
     """service.py和projects.py的数据库操作"""
     site_ip = request.session['site_ip']
     service_ip = request.session['service_ip']
@@ -54,7 +54,7 @@ def getsetnewTestServices(site_ip, service_ip, service_username, service_pwd, se
 def getallTestServices(site_ip):
     """service.py和projects.py的数据库操作"""
     # 返回最新的30条数据
-    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse()[:30].values()
+    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse()[:10].values()
     len(test_services)
     test_services_list = []
     for test_service in test_services:
@@ -70,13 +70,13 @@ def getallTestServices(site_ip):
     return test_services_list
 
 
-def sqlsetSiteServices(site_ip, service_ip, service_username, service_pwd, service_port):
+def setSiteServices(site_ip, service_ip, service_username, service_pwd, service_port):
     SiteServices.objects.create(site_ip=site_ip, service_ip=service_ip,
                                 service_username=service_username, service_pwd=service_pwd,
                                 service_port=service_port)
 
 
-def sqlsetSignAccout(site_ip, username, password, test_sign, test_login):
+def setSignAccout(site_ip, username, password, test_sign, test_login):
     try:
         signacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
         signacc.test_sign = test_sign
@@ -87,35 +87,39 @@ def sqlsetSignAccout(site_ip, username, password, test_sign, test_login):
                                  test_login=test_login)
 
 
-def sqlsetLoginAccout(site_ip, username, password, test_login):
+def setLoginAccout(site_ip, username, password, test_login):
     try:
         loginacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
-        loginacc.test_login = test_login
+        loginacc.test_login += test_login
         loginacc.save()
     except UserLogin.DoesNotExist:
         UserLogin.objects.create(site_ip=site_ip, username=username, password=password, test_sign=0,
                                  test_login=1)
 
 
-def sqlgetSeachAccount(site_ip, test_login):
+def getSeachAccount(site_ip, test_login):
     allAccount = UserLogin.objects.filter(site_ip=site_ip, test_login=test_login)
     return allAccount
 
 
-def sqlsetProcesssPart(main_process, strecondary_process, from_process, site_ip, start_end_time):
+def setProcesssPart(main_process, strecondary_process, from_process, site_ip, start_end_time):
     ProcesssPart.objects.create(main_process=main_process, strecondary_process=strecondary_process,
                                 from_process=from_process, site_ip=site_ip, start_end_time=start_end_time)
 
 
-def sqlsetLoginProblem(site_ip, username, password, login_status, problem_id, problem_res,
+def setLoginProblem(site_ip, username, password, login_status, problem_id, problem_res,
                        start_end_time):
     LoginProblem.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
                                 problem_id=problem_id, problem_res=problem_res, start_end_time=start_end_time)
 
 
-def sqlsetForceTime(site_ip, username, password, login_status, urls_len, start_end_time):
+def setForceTime(site_ip, username, password, login_status, urls_len, start_end_time):
     ForceTime.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
                              urls_len=urls_len, start_end_time=start_end_time)
+
+
+def setFilePath(site_ip, process_name, filename, file_path, use_datetime):
+    FilePath.objects.create(site_ip,process_name,)
 
 
 if __name__ == '__main__':

@@ -76,8 +76,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AutoWebForceTest.wsgi.application'
 
 # Session_Cookies
-SESSION_COOKIE_AGE = 600                            # Session的cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
-CSRF_COOKIE_AGE = 600                              # cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
+SESSION_COOKIE_AGE = 3600                            # Session的cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
+CSRF_COOKIE_AGE = 3600                              # cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

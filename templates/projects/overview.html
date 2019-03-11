@@ -30,9 +30,9 @@
     </div>
 </div>
 
-<h2 class="sub-header">服务器web状态：</h2>
-<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span
-        id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>
+{#<h2 class="sub-header">服务器web状态：</h2>#}
+{#<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span#}
+{#        id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>#}
 <div class="table-responsive">
     {% block chartblock %}
     {% endblock %}
@@ -40,6 +40,14 @@
 
 {% block customjs %}
     <script type="text/javascript">
+        {#var time_data_new = {{ time_data_new }};#}
+        var id;
+        var siteIp;
+        var Theards;
+        var ReceiveT;
+        var TransmitT;
+        var linksNum;
+        var datetime;
         var UserMem = {{ time_data_new.UsedM }};
         var TotalM = {{ time_data_new.TotalM }};
         var MemP = UserMem / TotalM;
@@ -161,9 +169,11 @@
          **/
 
         setInterval(function () {
+            /**
             $.getJSON({% url 'services_ajax' %}, function (ret) {
-                var time_data_new = ret.time_data_new;
-                var siteIp = time_data_new.site_ip;
+                time_data_new = ret.time_data_new;
+                id = time_data_new.id;
+                siteIp = time_data_new.site_ip;
                 CPUP = time_data_new.CPUP;
                 UserMem = time_data_new.UsedM;
                 TotalM = time_data_new.TotalM;
@@ -172,21 +182,34 @@
                 HardUser = time_data_new.HardUser;
                 DiskP = HardUser / HardTotal;
                 LoadStatP = time_data_new.LoadStat;
-                var Theards = time_data_new.Theards;
-                var ReceiveT = time_data_new.ReceiveT;
-                var TransmitT = time_data_new.TransmitT;
-                var linksNum = time_data_new.linksNum;
-                {#datetime = time_data_new.datetime;#}
+                Theards = time_data_new.Theards;
+                ReceiveT = time_data_new.ReceiveT;
+                TransmitT = time_data_new.TransmitT;
+                linksNum = time_data_new.linksNum;
+                datetime = time_data_new.datetime;
                 gaugeInfo();
                 siteIp_element.innerText = siteIp;
                 TotalM_element.innerText = TotalM;
                 HardTotal_element.innerText = HardTotal;
                 {#CPUM_element.innerText = CPUP;                      // CPU值未获取#}
                 Theards_element.innerText = Theards;
-                ReceiveT_element.innerText = ReceiveT;
-                TransmitT_element.innerText = TransmitT;
                 linksNum_element.innerText = linksNum;
+                var t = new Date(+new Date(datetime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                var long = document.getElementById("service_table").rows.length;               //获取table中tr的个数，我的想保留6行，当大于6时可以删除，小于6时不能删除
+                if (long > 0) {
+                    $("#service_table tbody").prepend('<tr>' +
+                        '<td>' + id + '</td>' + '<td>' + siteIp + '</td>' + '<td>' + TotalM + '</td>' +
+                        '<td>' + UserMem + '</td>' + '<td>' + HardTotal + '</td>' +
+                        '<td>' + HardUser + '</td>' + '<td>' + LoadStatP + '</td>' +
+                        '<td>' + Theards + '</td>' + '<td>' + ReceiveT + '</td>' +
+                        '<td>' + TransmitT + '</td>' + '<td>' + linksNum + '</td>' +
+                        '<td>' + CPUP + '</td>' + '<td>' + t + '</td>' + '</tr>');
+                    if (long > 6) {                                                         //判断一下table中tr的个数
+                        $("#service_table tr:last").remove();    //删除table中的最后一个tr
+                    }
+                }
             })
+            **/
         }, 5000);
 
     </script>

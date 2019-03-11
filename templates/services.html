@@ -15,11 +15,12 @@
     {% endblock %}
     {% include 'projects/overview.html' %}
     {% block chartblock %}
-        <table class="table table-striped">
+        <h2 class="sub-header">服务器web状态：</h2>
+        <table id="service_table" class="table table-striped">
             <thead>
             <tr>
-                <th>#</th>
-                <th>ip</th>
+                <th>id</th>
+                <th>域名</th>
                 <th>总内存MB</th>
                 <th>使用内存MB</th>
                 <th>磁盘容量G</th>
@@ -33,7 +34,6 @@
                 <th>获取时间</th>
             </tr>
             </thead>
-
             <tbody>
             {% for test_service in test_services_list %}
                 <tr>
@@ -44,6 +44,5 @@
             {% endfor %}
             </tbody>
         </table>
-
     {% endblock %}
 {% endblock %}
