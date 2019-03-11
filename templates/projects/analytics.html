@@ -1,5 +1,12 @@
-<a id="asd">{{ request.session.site_ip }}</a>
-<script type="text/javascript">
-    var a = site_ip;
-    console.log(a)
-</script>
+{% extends 'base/dashboard.html' %}
+
+{% block projectDetail %}
+    {% block customcss %}
+        <style type="text/css">
+            html, body {
+                background: #e8e7e78a;
+            }
+        </style>
+    {% endblock %}
+    
+{% endblock %}

@@ -24,6 +24,11 @@ urlpatterns = [
 
     path('projects/', projects.projects),
     path('projects/test_sign/', projects.test_sign),
+    path('projects/test_login/', projects.test_login),
+    path('projects/test_problem/', projects.test_problem),
+    path('projects/test_force/', projects.test_force),
+    path('projects/test_upload/', projects.test_upload),
+
     path('projects/analytics/', project.analytice),
     path('projects/export/', project.export),
     path('projects/reports/', project.reports),

@@ -17,6 +17,7 @@ django.setup()
 from AutoActivity import configs, submitproblem, driverremote, loginorsign, datadeal, findurls
 from AutoActivity.myexception.loginError import loginError, problemError, signError
 from AutoActivity.mysqldeal import *
+from selenium.common.exceptions import NoSuchElementException
 
 NODELIST = configs.NODELIST
 
@@ -45,9 +46,9 @@ def problem(nodelist, user, pwd, i, MP, lock, dtime, problemmsg, loginmsg):
         driver.quit()
         lock.acquire()
         setLoginProblem(site_ip='http://zwu.hustoj.com/', username=user, password=pwd,
-                           login_status=loginmsg['problem' + str(i)], problem_id=1000,
-                           problem_res=problemmsg['problem' + str(i)],
-                           start_end_time=int(round((dtime['end' + str(i)] - dtime['start' + str(i)]) * 1000)))
+                        login_status=loginmsg['problem' + str(i)], problem_id=1000,
+                        problem_res=problemmsg['problem' + str(i)],
+                        start_end_time=int(round((dtime['end' + str(i)] - dtime['start' + str(i)]) * 1000)))
         lock.release()
     print('主进程', MP, '下的问题执行程序', i, '结束运行')
 
@@ -85,9 +86,9 @@ def force(nodelist, urls, url, user, pwd, i, MP, lock, dtime, loginmsg):
         driver.quit()
         lock.acquire()
         setForceTime(site_ip='http://' + url.split('/')[2] + '/', username=user, password=pwd,
-                        login_status=loginmsg['force' + str(i)],
-                        urls_len=len(urls),
-                        start_end_time=int(round((dtime['end' + str(i)] - dtime['start' + str(i)]) * 1000)))
+                     login_status=loginmsg['force' + str(i)],
+                     urls_len=len(urls),
+                     start_end_time=int(round((dtime['end' + str(i)] - dtime['start' + str(i)]) * 1000)))
         lock.release()
     print('主进程', MP, '下的压力程序', i, '结束运行')
 
@@ -110,7 +111,7 @@ def sign(nodelist, user, pwd, url, i, MP, lock, signmsg, loginmsg):
         driver.quit()
         lock.acquire()
         setSignAccout(site_ip='http://zwu.hustoj.com/', username=user, password=pwd,
-                         test_sign=signmsg['sign' + str(i)], test_login=loginmsg['login' + str(i)])
+                      test_sign=signmsg['sign' + str(i)], test_login=loginmsg['login' + str(i)])
         lock.release()
     print('主进程', MP, '下的注册程序', i, '结束运行')
 
@@ -131,7 +132,7 @@ def login(nodelist, url, user, pwd, i, MP, lock, message):
         driver.quit()
         lock.acquire()
         setLoginAccout(site_ip='http://' + url.split('/')[2] + '/', username=user, password=pwd,
-                          test_login=message['login' + str(i)])
+                       test_login=message['login' + str(i)])
         lock.release()
     print('主进程', MP, '下的登录程序', i, '结束运行')
 
@@ -229,7 +230,7 @@ def loginTest(nodelist, url, filename, MP):
     for s in range(step):
         index = s * k + MP
         t = multiprocessing.Process(target=login, args=(
-                                        nodelist, url, account[index][0], account[index][1], index, MP, lock, message,))
+            nodelist, url, account[index][0], account[index][1], index, MP, lock, message,))
         threads.append(t)
     for t in range(step):
         threads[t].start()
@@ -249,18 +250,33 @@ def loginProcess(url, filename):
     start = time.time()
     threads = []
     i = 0
-    for nodelist in NODELIST:
-        t = multiprocessing.Process(target=loginTest, args=(nodelist, url, filename, i))
-        threads.append(t)
-        i += 1
-    for t in range(len(NODELIST)):
-        threads[t].start()
-    for t in range(len(NODELIST)):
-        threads[t].join()
-    end = time.time()
-    setProcesssPart(main_process='loginProcess:' + str(len(NODELIST)), strecondary_process='loginTest',
-                       from_process='login', site_ip='http://' + url.split('/')[2] + '/',
-                       start_end_time=int(round((end - start) * 1000)))
+    opt = webdriver.ChromeOptions()
+    opt.add_argument('--headless')
+    driver = webdriver.Chrome(options=opt)
+    driver.get(url)
+    message = 'success'
+    try:
+        driver.find_element_by_xpath('//input[contains(@placeholder, "用户名")]')
+    except NoSuchElementException:
+        try:
+            driver.find_element_by_xpath('//input[contains(@placeholder, "邮箱")]')
+        except NoSuchElementException:
+            message = '未找到登录窗口'
+    if message == 'success':
+        for nodelist in NODELIST:
+            t = multiprocessing.Process(target=loginTest, args=(nodelist, url, filename, i))
+            threads.append(t)
+            i += 1
+        for t in range(len(NODELIST)):
+            threads[t].start()
+        for t in range(len(NODELIST)):
+            threads[t].join()
+        end = time.time()
+        setProcesssPart(main_process='loginProcess:' + str(len(NODELIST)), strecondary_process='loginTest',
+                        from_process='login', site_ip='http://' + url.split('/')[2] + '/',
+                        start_end_time=int(round((end - start) * 1000)))
+        message = '登录程序运行完成'
+    return message
 
 
 # 创建一个新的用户文件，num是用户数量。注册后进行登录，把测试结果输入数据库
@@ -268,7 +284,10 @@ def signProcess(url, filename, num):
     start = time.time()
     threads = []
     i = 0
-    file_message = datadeal.usersput(filename, num)
+    if num > 0:
+        file_message = datadeal.usersput(filename, num)
+    else:
+        file_message = '开始成功'
     if '成功' in file_message:
         for nodelist in NODELIST:
             t = multiprocessing.Process(target=signTest, args=(nodelist, url, filename, i))
@@ -280,8 +299,8 @@ def signProcess(url, filename, num):
             threads[t].join()
         end = time.time()
         setProcesssPart(main_process='sign_loginProcess:' + str(len(NODELIST)), strecondary_process='sign_loginTest',
-                           from_process='sing_login',
-                           site_ip='http://' + url.split('/')[2] + '/', start_end_time=int(round((end - start) * 1000)))
+                        from_process='sing_login',
+                        site_ip='http://' + url.split('/')[2] + '/', start_end_time=int(round((end - start) * 1000)))
         file_message += '，注册程序运行完成'
     else:
         file_message += '，无法注册'
@@ -302,9 +321,11 @@ def problemTaskProcess(filename):
     for t in range(len(NODELIST)):
         threads[t].join()
     end = time.time()
+    btime = int(round((end - start) * 1000))
     setProcesssPart(main_process='problemTaskProcess:' + str(len(NODELIST)), strecondary_process='problemTask',
-                       from_process='problem',
-                       site_ip='http://zwu.hustoj.com/', start_end_time=int(round((end - start) * 1000)))
+                    from_process='problem', site_ip='http://zwu.hustoj.com/', start_end_time=btime)
+    message = '问题测试程序已完成，耗时：' + str(btime) + '毫秒'
+    return message
 
 
 # 获取用户数据，把总结果测试结果写入数据库
@@ -328,9 +349,11 @@ def froceTestProcess(deep, login_url, filename):
     for t in range(len(NODELIST)):
         threads[t].join()
     end = time.time()
+    btime = int(round((end - start) * 1000))
     setProcesssPart(main_process='froceTestProcess:' + str(len(NODELIST)), strecondary_process='forceTest',
-                       from_process='force',
-                       site_ip=url, start_end_time=int(round((end - start) * 1000)))
+                    from_process='force', site_ip=url, start_end_time=btime)
+    message = '压力测试程序已完成，耗时：' + str(btime) + '毫秒'
+    return message
 
 
 if __name__ == '__main__':

@@ -7,14 +7,14 @@
 """
 import os
 import django
+import requests
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'AutoWebForceTest.settings')
 django.setup()
 
-from ActivityModel.models import UserLogin
 from django.shortcuts import render, redirect
-from AutoActivity.mysqldeal import getTestServices
-from AutoActivity.processtask import signProcess
+from AutoActivity.mysqldeal import getTestServices, getSignSuccessNum, getLoginSuccessNum, getForcrTimeNum
+from AutoActivity.processtask import signProcess, loginProcess, problemTaskProcess, froceTestProcess
 from django.http import JsonResponse
 from AutoActivity import configs
 
@@ -39,14 +39,79 @@ def test_sign(request):
     filename = request.GET['filename'] + '.xls'
     site = request.GET['site']
     num = int(request.GET['num'])
-    print(filename)
-    if not os.path.isfile(os.path.join(DATA_DIR, filename)):
+    if not os.path.isfile(os.path.join(DATA_DIR, filename)) or num == 0:
         message = signProcess(url=site, filename=filename, num=num)
-        count = UserLogin.objects.filter(site_ip=site, test_sign=1).count()
-        message = message + ':' + count
+        count = getSignSuccessNum('http://' + site.split('/')[2] + '/')
+        message = message + ':' + count + '个用户注册完成'
         if '文件生成错误' in message:
             os.remove(os.path.join(DATA_DIR, filename))
     else:
-        message = '文件已存在，请重命名'
-    print(message)
+        message = '文件已存在，请重命名,若继续请将num设置为0或修改文件名'
+    return JsonResponse({'message': message})
+
+
+def test_login(request):
+    filename = request.GET['filename'] + '.xls'
+    site = request.GET['site']
+    if not os.path.isfile(os.path.join(DATA_DIR, filename)):
+        message = '文件不存在，请注册或上传文件'
+    else:
+        try:
+            code = requests.get(site).status_code
+            if code == 200:
+                message = loginProcess(url=site, filename=filename)
+                count = getLoginSuccessNum('http://' + site.split('/')[2] + '/')
+                message = message + ':' + count
+            else:
+                message = '无法连接目标地址'
+        except Exception:
+            message = '登录地址错误'
+    return JsonResponse({'message': message})
+
+
+def test_upload(request):
+    filename = ''
+    upload_file = request.FILES.get("local_file", None)  # 获取上传的文件，如果没有文件，则默认为None
+    if not upload_file:
+        message = '没有选中任何文件'
+    elif 'xls' not in upload_file.name:
+        message = '必须是excle文件'
+    elif os.path.isfile(os.path.join(DATA_DIR, upload_file.name)):
+        message = '文件已存在，请重命名后上'
+    else:
+        destination = open(os.path.join(DATA_DIR, upload_file.name), 'wb+')  # 打开特定的文件进行二进制的写操作
+        for chunk in upload_file.chunks():  # 分块写入文件
+            destination.write(chunk)
+        destination.close()
+        filename = upload_file.name.split('.')[0]
+        message = '上传完成，直接注册使用请把num设置为0'
+    return JsonResponse({'message': message, 'filename': filename})
+
+
+def test_problem(request):
+    filename = request.GET['filename'] + '.xls'
+    if not os.path.isfile(os.path.join(DATA_DIR, filename)):
+        message = '文件不存在，请注册或上传文件'
+    else:
+        message = problemTaskProcess(filename=filename)
+    return JsonResponse({'message': message})
+
+
+def test_force(request):
+    deep = int(request.GET['deep'])
+    site = request.GET['site']
+    filename = request.GET['filename'] + '.xls'
+    if not os.path.isfile(os.path.join(DATA_DIR, filename)):
+        message = '文件不存在，请注册或上传文件'
+    else:
+        try:
+            code = requests.get(site).status_code
+            if code == 200:
+                message = froceTestProcess(deep=deep, login_url=site, filename=filename)
+                count = getForcrTimeNum('http://' + site.split('/')[2] + '/')
+                message = message + ':' + count
+            else:
+                message = '无法连接目标地址'
+        except Exception:
+            message = '登录地址错误'
     return JsonResponse({'message': message})

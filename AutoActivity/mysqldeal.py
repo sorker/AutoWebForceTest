@@ -87,6 +87,11 @@ def setSignAccout(site_ip, username, password, test_sign, test_login):
                                  test_login=test_login)
 
 
+def getSignSuccessNum(site_ip):
+    num = UserLogin.objects.filter(site_ip=site_ip, test_sign=1).count()
+    return str(num)
+
+
 def setLoginAccout(site_ip, username, password, test_login):
     try:
         loginacc = UserLogin.objects.get(site_ip=site_ip, username=username, password=password)
@@ -95,6 +100,11 @@ def setLoginAccout(site_ip, username, password, test_login):
     except UserLogin.DoesNotExist:
         UserLogin.objects.create(site_ip=site_ip, username=username, password=password, test_sign=0,
                                  test_login=1)
+
+
+def getLoginSuccessNum(site_ip):
+    num = UserLogin.objects.filter(site_ip=site_ip).exclude(test_login=0).count()
+    return str(num)
 
 
 def getSeachAccount(site_ip, test_login):
@@ -107,8 +117,7 @@ def setProcesssPart(main_process, strecondary_process, from_process, site_ip, st
                                 from_process=from_process, site_ip=site_ip, start_end_time=start_end_time)
 
 
-def setLoginProblem(site_ip, username, password, login_status, problem_id, problem_res,
-                       start_end_time):
+def setLoginProblem(site_ip, username, password, login_status, problem_id, problem_res, start_end_time):
     LoginProblem.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
                                 problem_id=problem_id, problem_res=problem_res, start_end_time=start_end_time)
 
@@ -118,11 +127,16 @@ def setForceTime(site_ip, username, password, login_status, urls_len, start_end_
                              urls_len=urls_len, start_end_time=start_end_time)
 
 
-def setFilePath(site_ip, process_name, filename, file_path, use_datetime):
-    FilePath.objects.create(site_ip,process_name,)
+def getForcrTimeNum(site_ip):
+    num = ForceTime.objects.filter(site_ip=site_ip, login_status=1).count()
+    return str(num)
+
+
+def setFilePath(site_ip, process_name, filename, file_path):
+    FilePath.objects.create(site_ip, process_name, filename, file_path)
 
 
 if __name__ == '__main__':
     # print(allTestServices('23'))
     # print(sqltestServices('http://zwu.hustoj.com/', '192.168.94.133'))
-    print('1')
+    print(getSignSuccessNum('http://zwu.hustoj.com/'))

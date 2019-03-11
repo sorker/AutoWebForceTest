@@ -38,9 +38,9 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li><a href="/projects/">概述 <span class="sr-only">(current)</span></a></li>
-                <li><a href="reports/">Reports</a></li>
-                <li><a href="analytics/">Analytics</a></li>
-                <li><a href="export/">Export</a></li>
+                <li><a href="/projects/reports/">Reports</a></li>
+                <li><a href="/projects/analytics/">Analytics</a></li>
+                <li><a href="/projects/export/">Export</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -52,18 +52,19 @@
 </div>
 <script type="application/javascript">
         var currurl = window.location.pathname;
-        currurl = currurl.replace('/', '').replace('/', '');
+        currurl = currurl.split('/');
+        currurl = currurl[currurl.length-2];
         var li_elements = document.getElementsByTagName('li');
         if (currurl == 'projects') {
             console.log(currurl+li_elements.length);
             li_elements[1].setAttribute("class", "active");
             li_elements[5].setAttribute("class", "active");
-        } else if (currurl == 'downloads') {
-            li_elements[3].setAttribute("class", "active");
-        } else if (currurl == 'about') {
-            li_elements[4].setAttribute("class", "active");
-        } else if (currurl == '') {
-            li_elements[0].setAttribute("class", "active");
+        } else if ('reports' == currurl) {
+            li_elements[6].setAttribute("class", "active");
+        } else if ('analytics' == currurl) {
+            li_elements[7].setAttribute("class", "active");
+        } else if ('export' == currurl) {
+            li_elements[8].setAttribute("class", "active");
         }
     </script>
 </body>
