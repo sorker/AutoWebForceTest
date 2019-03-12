@@ -26,7 +26,7 @@ class SiteServicesAdmin(admin.ModelAdmin):
 
 
 class ForceTimeAdmin(admin.ModelAdmin):
-    list_display = ('site_ip', 'username', 'password', 'login_status', 'urls_len', 'start_end_time')
+    list_display = ('site_ip', 'username', 'password', 'login_status', 'urls_len', 'start_end_time', 'use_datetime')
 
 
 class FilePathAdmin(admin.ModelAdmin):

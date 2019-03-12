@@ -68,6 +68,7 @@ class ForceTime(models.Model):
     login_status = models.IntegerField(u'登录状态')
     urls_len = models.IntegerField(u'测试的网站数量')
     start_end_time = models.IntegerField(u'测试用时')
+    use_datetime = models.DateTimeField(u'完成时间', auto_now=True)
 
     def __str__(self):
         return str(self.site_ip)

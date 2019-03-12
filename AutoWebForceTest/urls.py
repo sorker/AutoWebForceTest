@@ -28,6 +28,7 @@ urlpatterns = [
     path('projects/test_problem/', projects.test_problem),
     path('projects/test_force/', projects.test_force),
     path('projects/test_upload/', projects.test_upload),
+    path('projects/file_generation/', projects.file_generation),
 
     path('projects/analytics/', project.analytice),
     path('projects/export/', project.export),

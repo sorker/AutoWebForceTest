@@ -8,8 +8,10 @@
 import xlrd
 import xlwt
 import os
+import time
 from random import randint
 from AutoActivity import configs
+from AutoActivity.mysqldeal import setFilePath, getSeachAccount
 
 DATA_DIR = configs.DATA_DIR
 LONG_DATE = configs.LONG_DATE
@@ -69,6 +71,31 @@ def readcvs(filename):
     return user_pwd
 
 
+def excleProduce(site_ip, process_name, title, args):
+    filename = site_ip.split('/')[2] + '_' + process_name + '_' + time.strftime("%Y-%m-%d_%H_%M_%S") + '.xls'
+    try:
+        file_path = os.path.join(DATA_DIR, filename)
+        if not os.path.isfile(file_path):  # 判断文件是否存在，如果不存在就创建一个
+            open(file_path, 'w+')
+            workbook = xlwt.Workbook()
+            sheet1 = workbook.add_sheet('sheet1', cell_overwrite_ok=True)
+            for i, v in enumerate(title):
+                sheet1.write(0, i, v)
+            for k, arg in enumerate(args):
+                for i, v in enumerate(arg):
+                    sheet1.write(k + 1, i, v)
+            workbook.save(file_path)
+            # print('已生成有' + str(num) + '个用户的excle文件')
+            setFilePath(site_ip=site_ip, process_name=process_name, filename=filename, file_path=file_path)
+            return '账号密码文件生成成功，请到下载页面下载'
+        else:
+            return '文件已存在，请更换名字'
+    except Exception as e:
+        return '文件生成错误, error: %s' % e
+
+
 if __name__ == "__main__":
-    print(usersput('账号密码2.xls', 10))
+    # print(usersput('账号密码2.xls', 10))
     # print(readcvs('账号密码1.xls'))
+    print(excleProduce(r'http://zwu.hustoj.com/', '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
+                       list(getSeachAccount('http://zwu.hustoj.com/'))))

@@ -26,6 +26,7 @@
                 <input type="text" class="form-control" id="sign_num" placeholder="10">
             </div>
             <a id="test_sign" class="btn btn-default">注册用户</a>
+            <a id="sign_process" class="btn btn-default" >生成注册测试文件</a>
         </div>
         <div class="form-inline" style="padding-top: 20px">
             {% csrf_token %}
@@ -44,6 +45,7 @@
                        placeholder="http://zwu.hustoj.com/loginpage.php">
             </div>
             <a id="test_login" class="btn btn-default">登录测试</a>
+        <a id="login_process" class="btn btn-default" >生成登录测试文件</a>
         </div>
         <div class="form-inline" style="padding-top: 20px">
             <div class="form-group">
@@ -51,6 +53,7 @@
                 <input type="text" class="form-control" id="problem_file" placeholder="account">
             </div>
             <a id="test_problem" class="btn btn-default">针对性问题测试</a>
+        <a id="problem_process" class="btn btn-default" >生成问题测试文件</a>
         </div>
         <div class="form-inline" style="padding-top: 20px">
             <div class="form-group">
@@ -67,6 +70,7 @@
                 <input type="text" class="form-control" id="force_file" placeholder="account">
             </div>
             <a id="test_force" class="btn btn-default">针对性压力测试</a>
+        <a id="force_process" class="btn btn-default" >生成压力测试文件</a>
         </div>
         {% block customjs %}
             <script type="text/javascript">
@@ -231,7 +235,36 @@
                             }
                         })
                     }
-                })
+                });
+                $('#force_process').click(function () {
+                    fileajax('force_process')
+                });
+                $('#problem_process').click(function () {
+                    fileajax('problem_process')
+                });
+                $('#login_process').click(function () {
+                    fileajax('login_process')
+                });
+                $('#sign_process').click(function () {
+                    fileajax('sign_process')
+                });
+                function fileajax(process_name) {
+                    $.ajax({
+                            url: 'file_generation/',
+                            type: 'GET',
+                            data: {
+                                process_name:process_name
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在生成,请稍后......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                            }
+                        })
+                }
             </script>
         {% endblock %}
     {% endblock %}
