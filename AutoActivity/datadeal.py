@@ -9,9 +9,11 @@ import xlrd
 import xlwt
 import os
 import time
+import datetime
+from django.utils import timezone
 from random import randint
 from AutoActivity import configs
-from AutoActivity.mysqldeal import setFilePath, getSeachAccount
+from AutoActivity.mysqldeal import setFilePath, getLoginProblemList
 
 DATA_DIR = configs.DATA_DIR
 LONG_DATE = configs.LONG_DATE
@@ -72,7 +74,7 @@ def readcvs(filename):
 
 
 def excleProduce(site_ip, process_name, title, args):
-    filename = site_ip.split('/')[2] + '_' + process_name + '_' + time.strftime("%Y-%m-%d_%H_%M_%S") + '.xls'
+    filename = site_ip.split('/')[2] + '_' + process_name + '_' + time.strftime("%Y-%m-%d%H%M%S") + '.xls'
     try:
         file_path = os.path.join(DATA_DIR, filename)
         if not os.path.isfile(file_path):  # 判断文件是否存在，如果不存在就创建一个
@@ -83,7 +85,11 @@ def excleProduce(site_ip, process_name, title, args):
                 sheet1.write(0, i, v)
             for k, arg in enumerate(args):
                 for i, v in enumerate(arg):
+                    if 'datetime' in str(type(v)):
+                        v = str(v)
+                        v = v.split('+', 1)[0]
                     sheet1.write(k + 1, i, v)
+            sheet1.write(0, len(title), '用户数:' + str(len(args)))
             workbook.save(file_path)
             # print('已生成有' + str(num) + '个用户的excle文件')
             setFilePath(site_ip=site_ip, process_name=process_name, filename=filename, file_path=file_path)
@@ -97,5 +103,12 @@ def excleProduce(site_ip, process_name, title, args):
 if __name__ == "__main__":
     # print(usersput('账号密码2.xls', 10))
     # print(readcvs('账号密码1.xls'))
-    print(excleProduce(r'http://zwu.hustoj.com/', '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
-                       list(getSeachAccount('http://zwu.hustoj.com/'))))
+    # print(excleProduce(r'http://zwu.hustoj.com/', '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
+    #                    list(getSeachAccount('http://zwu.hustoj.com/'))))
+    print(excleProduce(r'http://zwu.hustoj.com/', '问题程序',
+                 ['id', '被测试的站点', '用户名', '密码', '登录状态', '问题id', '问题运行结果', '测试用时', '完成时间'],
+                 list(getLoginProblemList('http://zwu.hustoj.com/'))))
+    v = datetime.datetime.utcnow()
+    print(v)
+    v.replace(tzinfo=None)
+    print(v)

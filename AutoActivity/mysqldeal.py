@@ -113,8 +113,13 @@ def getLoginSuccessNum(site_ip):
 
 
 # 获取所有可以登录的账号
-def getSeachAccount(site_ip):
+def getSeachAccountList(site_ip):
     allAccount = UserLogin.objects.filter(site_ip=site_ip).exclude(test_login=0).values_list()
+    return allAccount
+
+
+def getSeachAccountDict(site_ip):
+    allAccount = UserLogin.objects.filter(site_ip=site_ip).exclude(test_login=0).values()
     return allAccount
 
 
@@ -124,6 +129,12 @@ def setProcesssPart(main_process, strecondary_process, from_process, site_ip, st
                                 from_process=from_process, site_ip=site_ip, start_end_time=start_end_time)
 
 
+# 写入分布式进程名和运行时间
+def getProcesssPart(site_ip):
+    processs_part = ProcesssPart.objects.filter(site_ip=site_ip).values()
+    return processs_part
+
+
 # 写入问题程序信息
 def setLoginProblem(site_ip, username, password, login_status, problem_id, problem_res, start_end_time):
     LoginProblem.objects.create(site_ip=site_ip, username=username, password=password, login_status=login_status,
@@ -131,8 +142,13 @@ def setLoginProblem(site_ip, username, password, login_status, problem_id, probl
 
 
 # 获取网站问题测试信息
-def getLoginProblem(site_ip):
+def getLoginProblemList(site_ip):
     login_problem = LoginProblem.objects.filter(site_ip=site_ip).values_list()
+    return login_problem
+
+
+def getLoginProblemDict(site_ip):
+    login_problem = LoginProblem.objects.filter(site_ip=site_ip).values()
     return login_problem
 
 
@@ -143,8 +159,13 @@ def setForceTime(site_ip, username, password, login_status, urls_len, start_end_
 
 
 # 获取网站压力测试信息
-def getForceTime(site_ip):
+def getForceTimeList(site_ip):
     force_time = ForceTime.objects.filter(site_ip=site_ip).values_list()
+    return force_time
+
+
+def getForceTimeDict(site_ip):
+    force_time = ForceTime.objects.filter(site_ip=site_ip).values()
     return force_time
 
 
@@ -160,7 +181,7 @@ def setFilePath(site_ip, process_name, filename, file_path):
 
 
 def getFilePath(site_ip):
-    file_path = FilePath.objects.filter(site_ip=site_ip).values_list()
+    file_path = FilePath.objects.filter(site_ip=site_ip).values()
     return file_path
 
 

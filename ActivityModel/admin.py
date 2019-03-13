@@ -10,7 +10,7 @@ class UserLoginAdmin(admin.ModelAdmin):
 
 class LoginProblemAdmin(admin.ModelAdmin):
     list_display = (
-    'site_ip', 'username', 'password', 'login_status', 'problem_id', 'problem_res', 'start_end_time', 'datetime')
+        'site_ip', 'username', 'password', 'login_status', 'problem_id', 'problem_res', 'start_end_time', 'datetime')
 
 
 class TestServiceAdmin(admin.ModelAdmin):

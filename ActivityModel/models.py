@@ -35,6 +35,7 @@ class ProcesssPart(models.Model):
     from_process = models.CharField(u'从进程，进程名', max_length=100)
     start_end_time = models.IntegerField(u'测试用时')
     site_ip = models.CharField(u'被测试的站点', max_length=100)
+    datetime = models.DateTimeField(u'完成时间', auto_now=True)
 
     def __str__(self):
         return str(self.site_ip)

@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from AutoActivity import configs
 from django.shortcuts import render, redirect
 from AutoActivity.mysqldeal import getTestServices, getSignSuccessNum, getLoginSuccessNum, getForcrTimeNum, \
-    getallTestServices, getSeachAccount, getLoginProblem, getForceTime, setFilePath
+    getallTestServices, getSeachAccountList, getLoginProblemList, getForceTimeList, setFilePath
 
 DATA_DIR = configs.DATA_DIR
 
@@ -95,9 +95,6 @@ def test_problem(request):
         message = '文件不存在，请注册或上传文件'
     else:
         message = problemTaskProcess(filename=filename)
-        excleProduce(r'http://zwu.hustoj.com/', '问题程序',
-                     ['id', '被测试的站点', '用户名', '密码', '登录状态', '问题id', '问题运行结果', '测试用时', '完成时间'],
-                     list(getLoginProblem('http://zwu.hustoj.com/')))
     return JsonResponse({'message': message})
 
 
@@ -125,15 +122,15 @@ def file_generation(request):
     process_name = request.GET['process_name'];
     if process_name == 'sign_process':
         excleProduce(r'http://zwu.hustoj.com/', '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
-                     list(getSeachAccount('http://zwu.hustoj.com/')))
+                     list(getSeachAccountList('http://zwu.hustoj.com/')))
     elif process_name == 'login_process':
         excleProduce(r'http://zwu.hustoj.com/', '登录程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
-                     list(getSeachAccount('http://zwu.hustoj.com/')))
+                     list(getSeachAccountList('http://zwu.hustoj.com/')))
     elif process_name == 'problem_process':
         excleProduce(r'http://zwu.hustoj.com/', '问题程序',
                      ['id', '被测试的站点', '用户名', '密码', '登录状态', '问题id', '问题运行结果', '测试用时', '完成时间'],
-                     list(getLoginProblem('http://zwu.hustoj.com/')))
+                     list(getLoginProblemList('http://zwu.hustoj.com/')))
     elif process_name == 'force_process':
         excleProduce(r'http://zwu.hustoj.com/', '压力程序', ['id', '被测试的站点', '用户名', '密码', '登录状态', '网站数量', '测试用时', '完成时间'],
-                     list(getForceTime('http://zwu.hustoj.com/')))
+                     list(getForceTimeList('http://zwu.hustoj.com/')))
     return JsonResponse({'message': '生成成功'})

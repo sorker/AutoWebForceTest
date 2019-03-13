@@ -8,5 +8,145 @@
             }
         </style>
     {% endblock %}
-
+    <span id="result" style="float: right; color: #FF0000">{{ message }}</span>
+    <input type="button" value="打印报告" style="float: right" class="btn btn-default" onclick="exportPuts()">
+    <!--startprint-->
+    <h2 class="sub-header">进程总测试报告</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>主进程：个数</th>
+                <th>控制进程</th>
+                <th>进程</th>
+                <th>测试用时</th>
+                <th>被测试的站点</th>
+                <th>完成时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for processs in processs_part %}
+                <tr>
+                    {% for k, v in processs.items %}
+                        <td>{{ v }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2 class="sub-header">注册登录测试报告</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>被测试的站点</th>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>注册结果</th>
+                <th>登录次数</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sign_login in sign_login_acc %}
+                <tr>
+                    {% for k, v in sign_login.items %}
+                        {% if k in 'test_sign' and v == 0 %}
+                            <td>注册失败</td>
+                        {% elif k in 'test_sign' and v == 1 %}
+                            <td>注册成功</td>
+                        {% else %}
+                            <td>{{ v }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2 class="sub-header">问题测试报告</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>被测试的站点</th>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>登录状态</th>
+                <th>问题id</th>
+                <th>问题运行结果</th>
+                <th>测试用时</th>
+                <th>运行时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for problem in login_problem %}
+                <tr>
+                    {% for k, v in problem.items %}
+                        {% if k in 'login_status' and v == 0 %}
+                            <td>登录失败</td>
+                        {% elif k in 'login_status' and v == 1 %}
+                            <td>登录成功</td>
+                        {% else %}
+                            <td>{{ v }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2 class="sub-header">压力测试报告</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>被测试的站点</th>
+                <th>以测试的用户名</th>
+                <th>以测试的密码</th>
+                <th>登录状态</th>
+                <th>测试网站的数量</th>
+                <th>测试用时</th>
+                <th>完成时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for force in force_time %}
+                <tr>
+                    {% for k, v in force.items %}
+                        {% if k in 'login_status' and v == 0 %}
+                            <td>登录失败</td>
+                        {% elif k in 'login_status' and v == 1 %}
+                            <td>登录成功</td>
+                        {% else %}
+                            <td>{{ v }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!--endprint-->
+    {% block customjs %}
+        <script type="text/javascript">
+            function exportPuts() {
+                bdhtml = window.document.body.innerHTML;
+                sprnstr = "<!--startprint-->";      //必须在页面添加<!--startprint-->和;<!--endprint-->而且需要打印的内容必须在它们之间;
+                eprnstr = "<!--endprint-->";
+                prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 18);
+                prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+                var newWin = window.open("");           //新打开一个空窗口
+                newWin.document.body.innerHTML = prnhtml;
+                newWin.document.close();        //在IE浏览器中使用必须添加这一句
+                newWin.focus();     //在IE浏览器中使用必须添加这一句
+                newWin.print();     //打印
+                newWin.close();     //关闭窗口
+            }
+        </script>
+    {% endblock %}
 {% endblock %}

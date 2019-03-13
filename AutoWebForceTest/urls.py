@@ -38,6 +38,8 @@ urlpatterns = [
     path('services_ajax/', services.services_ajax, name='services_ajax'),
 
     path('downloads/', downloads.downloads),
+    path('downloads/file_down/', downloads.file_down, name='file_down'),
+
     path('about/', about.about),
 
     path('test/', view.gauge),
