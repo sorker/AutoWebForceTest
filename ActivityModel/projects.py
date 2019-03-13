@@ -13,7 +13,8 @@ from django.http import JsonResponse
 from AutoActivity import configs
 from django.shortcuts import render, redirect
 from AutoActivity.mysqldeal import getTestServices, getSignSuccessNum, getLoginSuccessNum, getForcrTimeNum, \
-    getallTestServices, getSeachAccountList, getLoginProblemList, getForceTimeList, setFilePath
+    getTenTestServicesList, getSeachAccountList, getLoginProblemList, getForceTimeList, setFilePath,\
+    getallTestServicesList
 
 DATA_DIR = configs.DATA_DIR
 
@@ -23,7 +24,7 @@ def projects(request):
         site_ip_session = request.session['site_ip']
         site_ip_cookies = request.COOKIES.get('site_ip')
         if site_ip_session == site_ip_cookies:  # 存在session和cookies相等
-            test_services_list = getallTestServices(site_ip_cookies)
+            test_services_list = getTenTestServicesList(site_ip_cookies)
             time_data_new = getTestServices(request)
             return render(request, 'projects.html',
                           {'time_data_new': time_data_new, 'test_services_list': test_services_list})
@@ -119,18 +120,24 @@ def test_force(request):
 
 
 def file_generation(request):
+    site_ip = request.session['site_ip']
     process_name = request.GET['process_name'];
     if process_name == 'sign_process':
-        excleProduce(r'http://zwu.hustoj.com/', '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
-                     list(getSeachAccountList('http://zwu.hustoj.com/')))
+        excleProduce(site_ip, '注册程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
+                     list(getSeachAccountList(site_ip)))
     elif process_name == 'login_process':
-        excleProduce(r'http://zwu.hustoj.com/', '登录程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
-                     list(getSeachAccountList('http://zwu.hustoj.com/')))
+        excleProduce(site_ip, '登录程序', ['id', '网址', '用户名', '密码', '是否注册', '是否登录'],
+                     list(getSeachAccountList(site_ip)))
     elif process_name == 'problem_process':
-        excleProduce(r'http://zwu.hustoj.com/', '问题程序',
+        excleProduce(site_ip, '问题程序',
                      ['id', '被测试的站点', '用户名', '密码', '登录状态', '问题id', '问题运行结果', '测试用时', '完成时间'],
-                     list(getLoginProblemList('http://zwu.hustoj.com/')))
+                     list(getLoginProblemList(site_ip)))
     elif process_name == 'force_process':
-        excleProduce(r'http://zwu.hustoj.com/', '压力程序', ['id', '被测试的站点', '用户名', '密码', '登录状态', '网站数量', '测试用时', '完成时间'],
-                     list(getForceTimeList('http://zwu.hustoj.com/')))
+        excleProduce(site_ip, '压力程序', ['id', '被测试的站点', '用户名', '密码', '登录状态', '网站数量', '测试用时', '完成时间'],
+                     list(getForceTimeList(site_ip)))
+    elif process_name == 'service_reports':
+        excleProduce(site_ip, '服务器数据报告',
+                     ['id', '域名', '总内存MB', '使用内存MB', '磁盘容量G', '已用磁盘G', '负载均衡%', '线程比', '接收数据MB', '发送数据MB', '80端口连接数',
+                      'CPU使用%', '获取时间'],
+                     list(getallTestServicesList(site_ip)))
     return JsonResponse({'message': '生成成功'})

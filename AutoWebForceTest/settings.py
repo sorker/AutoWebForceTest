@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ActivityModel.apps.ActivitymodelConfig',
     'bootstrap3'
+    # 'mdeditor'  # 富文本编辑器
 ]
 
 MIDDLEWARE = [

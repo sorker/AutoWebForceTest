@@ -51,10 +51,10 @@ def getsetnewTestServices(site_ip, service_ip, service_username, service_pwd, se
     return time_data_new
 
 
-def getallTestServices(site_ip):
+def getTenTestServicesList(site_ip):
     """service.py和projects.py的数据库操作"""
     # 返回最新的30条数据
-    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse()[:10].values()
+    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse().values()
     len(test_services)
     test_services_list = []
     for test_service in test_services:
@@ -67,6 +67,29 @@ def getallTestServices(site_ip):
         time_data_new.update(time_data)
         time_data_new.update({"datetime": datetime})
         test_services_list.append(time_data_new)
+    return test_services_list
+
+
+def getallTestServicesList(site_ip):
+    """service.py和projects.py的数据库操作"""
+    # 返回最新的30条数据
+    test_services = TestService.objects.filter(site_ip=site_ip).values()
+    len(test_services)
+    test_services_list = []
+    for test_service in test_services:
+        time_data_new = []
+        id = test_service.get('id')
+        site_ip = test_service.get('site_ip')
+        time_data = json.loads(test_service.get('time_data').replace('\'', '\"'))
+        datetime = test_service.get('datetime')
+        time_data_new.append(id)
+        time_data_new.append(site_ip)
+        # print(time_data)
+        for k,v in time_data.items():
+            time_data_new.append(v)
+        time_data_new.append(datetime)
+        test_services_list.append(time_data_new)
+    # print(test_services_list)
     return test_services_list
 
 
@@ -188,5 +211,5 @@ def getFilePath(site_ip):
 if __name__ == '__main__':
     # print(allTestServices('23'))
     # print(sqltestServices('http://zwu.hustoj.com/', '192.168.94.133'))
-    print(list(getSeachAccount('http://zwu.hustoj.com/')))
+    getallTestServicesList('http://zwu.hustoj.com/')
 

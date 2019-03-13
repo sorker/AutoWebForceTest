@@ -40,7 +40,7 @@ def usersput(filename, num):
                 sheet1.write(i + 1, 1, user_pwd)
             workbook.save(filename)
             # print('已生成有' + str(num) + '个用户的excle文件')
-            return '账号密码文件生成成功，请到下载页面下载'
+            return '账号密码文件生成成功'
         else:
             return '文件已存在，请更换名字'
     except Exception as e:
@@ -89,7 +89,10 @@ def excleProduce(site_ip, process_name, title, args):
                         v = str(v)
                         v = v.split('+', 1)[0]
                     sheet1.write(k + 1, i, v)
-            sheet1.write(0, len(title), '用户数:' + str(len(args)))
+            if process_name in '服务器数据报告':
+                sheet1.write(0, len(title), '获取条数:' + str(len(args)))
+            else:
+                sheet1.write(0, len(title), '用户数:' + str(len(args)))
             workbook.save(file_path)
             # print('已生成有' + str(num) + '个用户的excle文件')
             setFilePath(site_ip=site_ip, process_name=process_name, filename=filename, file_path=file_path)

@@ -29,6 +29,7 @@
         <span class="text-muted">线程比:<span id="Theards">{{ time_data_new.Theards }}</span></span>
     </div>
 </div>
+<p><a id="service_reports" class="btn btn-default" onclick="serviceReport()">生成服务器数据报告</a></p>
 
 {#<h2 class="sub-header">服务器web状态：</h2>#}
 {#<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span#}
@@ -40,6 +41,25 @@
 
 {% block customjs %}
     <script type="text/javascript">
+        function serviceReport() {
+            process_name = 'service_reports';
+                $.ajax({
+                    url: '/projects/file_generation/',
+                    type: 'GET',
+                    data: {
+                        process_name: process_name
+                    },
+                    {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                    beforeSend: function () {
+                        // 禁用按钮防止重复提交
+                        $('#result').html('正在生成,请稍后......');
+                    },
+                    success: function (res) {
+                        $('#result').html(res.message);
+                    }
+                })
+        }
+
         {#var time_data_new = {{ time_data_new }};#}
         var id;
         var siteIp;
