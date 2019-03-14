@@ -196,10 +196,10 @@ def signTest(nodelist, url, filename, MP):
     signmsg = {}
     loginmsg = {}
     account = datadeal.readcvs(filename)
-    n = len(account)
-    k = len(NODELIST)
-    step = int(n / k)
-    if MP < n % k:
+    n = len(account)    # 用户数量
+    k = len(NODELIST)   # 分布式数量
+    step = int(n / k)   # 一个分布式获取多少用户数，步数
+    if MP < n % k:  # 步数小于当前分布式进行，步数加1
         step += 1
     threads = []
     lock = multiprocessing.Lock()

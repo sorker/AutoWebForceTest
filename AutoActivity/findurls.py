@@ -28,6 +28,7 @@ def site_urls(driver, url):
                 useful_urls.append(new_url)
     return useful_urls
 
+
 # 获取一定深度的站点页面
 def all_urls_deep(driver, url, deep):
     urls = [url]  # 所有页面集合
