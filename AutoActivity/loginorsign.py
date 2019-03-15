@@ -5,7 +5,6 @@
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """
-from selenium import webdriver
 from selenium.common.exceptions import UnexpectedAlertPresentException, NoSuchElementException
 from time import time,sleep
 from AutoActivity import configs

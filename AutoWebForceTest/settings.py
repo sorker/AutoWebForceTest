@@ -86,13 +86,13 @@ CSRF_COOKIE_AGE = 3600                              # cookie失效日期（2周�
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',  # 或者使用 django.db.backends.mysql
-        'NAME': 'autoworkers',
+        'NAME': 'autoworkers',  # 数据库名
         'USER': 'user',
         'PASSWORD': 'user',
         'HOST': 'localhost',
         'PORT': '3306',
     },
-    # 'default': {
+    # 'default': {  # 自带的数据库环境
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }

@@ -6,13 +6,7 @@
  @Email   : sorker0129@hotmail.com
 """
 from AutoActivity import loginorsign
-from AutoActivity import driverremote
 from AutoActivity import configs
-
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities as DC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import Remote
 from time import sleep
