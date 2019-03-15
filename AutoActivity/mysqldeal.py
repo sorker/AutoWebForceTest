@@ -54,7 +54,7 @@ def getsetnewTestServices(site_ip, service_ip, service_username, service_pwd, se
 def getTenTestServicesList(site_ip):
     """service.py和projects.py的数据库操作"""
     # 返回最新的30条数据
-    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse().values()
+    test_services = TestService.objects.filter(site_ip=site_ip).order_by('id').reverse()[:10].values()
     len(test_services)
     test_services_list = []
     for test_service in test_services:
