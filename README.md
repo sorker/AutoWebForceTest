@@ -9,6 +9,8 @@
   ####使用前环境配置要求：
   windows7以上，至少安装有最新版chrome、谷歌浏览器驱动最新版、、java8环境、python3.5以上版本
   
+  windows10直接`scoop install chromedriver`就可以安装chrome驱动了，不需要配置环境，10一下的系统需要下载驱动，安装解压到：C:\Program Files (x86)\Google\Chrome\Application下并配置到Path环境下
+
   我的python环境：版本3.7.0，安装的基本包：selenium、os、request、django、multiprocessing、time、re
   
   运行config下的主程序启动本地分布式环境，当然最好用cmd启动(在文件夹下的cmd中输入：
@@ -31,5 +33,5 @@
 
   在AutoWebForceTest下的setting修改数据库信息
   
-  
   在文件夹下用cmd输入命令：`python manage.py runserver` 运行网站
+  
