@@ -35,3 +35,4 @@
   
   在文件夹下用cmd输入命令：`python manage.py runserver` 运行网站
   
+  **建议每台主机的并发数不要超过10个**
