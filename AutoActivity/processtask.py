@@ -34,6 +34,7 @@ def problem(nodelist, user, pwd, i, MP, lock, dtime, problemmsg, loginmsg):
             problemmsg['problem' + str(i)] = submitproblem.problem_test(driver)
             if '获取结果超时' in problemmsg['problem' + str(i)]:
                 raise problemError(problemmsg['problem' + str(i)])
+            driver.quit()
         else:
             raise loginError(login)
     except loginError:
@@ -43,7 +44,6 @@ def problem(nodelist, user, pwd, i, MP, lock, dtime, problemmsg, loginmsg):
         problemmsg['problem' + str(i)] = '未知错误，获取结果超时'
     finally:
         dtime['end' + str(i)] = time.time()
-        driver.quit()
         lock.acquire()
         setLoginProblem(site_ip='http://zwu.hustoj.com/', username=user, password=pwd,
                         login_status=loginmsg['problem' + str(i)], problem_id=1000,
@@ -77,13 +77,13 @@ def force(nodelist, urls, url, user, pwd, i, MP, lock, dtime, loginmsg):
             loginmsg['force' + str(i)] = 1
             for page in urls:
                 driver.get(page)
+            driver.quit()
         else:
             raise loginError(login)
     except loginError:
         loginmsg['force' + str(i)] = 0
     finally:
         dtime['end' + str(i)] = time.time()
-        driver.quit()
         lock.acquire()
         setForceTime(site_ip='http://' + url.split('/')[2] + '/', username=user, password=pwd,
                      login_status=loginmsg['force' + str(i)],
@@ -102,13 +102,13 @@ def sign(nodelist, user, pwd, url, i, MP, lock, signmsg, loginmsg):
         if signmsg['sign' + str(i)] in 'sign: success':
             signmsg['sign' + str(i)] = 1
             loginmsg['login' + str(i)] = 1
+            driver.quit()
         else:
             raise signError(signmsg['sign' + str(i)])
     except signError:
         signmsg['sign' + str(i)] = 0
         loginmsg['login' + str(i)] = 0
     finally:
-        driver.quit()
         lock.acquire()
         setSignAccout(site_ip='http://zwu.hustoj.com/', username=user, password=pwd,
                       test_sign=signmsg['sign' + str(i)], test_login=loginmsg['login' + str(i)])
@@ -123,13 +123,13 @@ def login(nodelist, url, user, pwd, i, MP, lock, message):
         message['login' + str(i)] = loginorsign.login(driver, url, user, pwd)
         if message['login' + str(i)] in 'login: success':
             message['login' + str(i)] = 1
+            driver.quit()
         else:
             raise loginError(message['login' + str(i)])
     except loginError as e:
         print(message['login' + str(i)])
         message['login' + str(i)] = 0
     finally:
-        driver.quit()
         lock.acquire()
         setLoginAccout(site_ip='http://' + url.split('/')[2] + '/', username=user, password=pwd,
                        test_login=message['login' + str(i)])

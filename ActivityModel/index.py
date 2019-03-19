@@ -35,7 +35,7 @@ def index_site(request):
         site_ip = request.POST['site_ip']
         service_info = request.POST['service_info'].split(';')
         if len(service_info) != 4:
-            message = '格式错误,例:192.168.94.133;root;123456;22'
+            message = '格式错误,例:192.168.94.134;root;123456;22'
             response = JsonResponse({'message': message})
         else:
             service_ip = service_info[0]
