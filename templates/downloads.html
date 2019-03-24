@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base/base.html" %}
+{% block navigationBar %}
+    {% include "base/navigationBar.html" %}
+{% endblock %}
+{% block indexInfo %}
+    <span id="result" style="float: right; color: #FF0000">{{ message }}</span>
+    <h2 class="sub-header">测试文件下载</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>站点</th>
+                <th>程序名</th>
+                <th>文件名</th>
+                <th>下载地址</th>
+                <th>生成时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in file_path %}
+                <tr>
+                    {% for k, v in file.items %}
+                        {% if k not in 'file_path' %}
+                            <td>{{ v }}</td>
+                        {% else %}
+                            <td><a id="file_down" href='/downloads/file_down?file_path={{ v }}'>下载</a></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,7 +1,12 @@
 # -*- coding:utf-8 -*-
-from selenium import webdriver
-from selenium.common.exceptions import UnexpectedAlertPresentException
-from time import time
+"""
+ @time    : 2019/2/20 13:12
+ @desc    : 登陆\注册方法
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
+from selenium.common.exceptions import UnexpectedAlertPresentException, NoSuchElementException
+from time import time,sleep
 from AutoActivity import configs
 from AutoActivity import driverremote
 
@@ -20,7 +25,10 @@ def login(driver, url, user, pwd):
     """
     try:
         driver.get(url)
-        username = driver.find_element_by_xpath('//input[contains(@placeholder, "用户名")]')
+        try:
+            username = driver.find_element_by_xpath('//input[contains(@placeholder, "用户名")]')
+        except NoSuchElementException:
+            username = driver.find_element_by_xpath('//input[contains(@placeholder, "邮箱")]')
         password = driver.find_element_by_xpath('//input[contains(@placeholder, "密码")]')
         submit = driver.find_element_by_xpath('//*[@type="submit"]')
         username.clear()
@@ -28,7 +36,7 @@ def login(driver, url, user, pwd):
         username.send_keys(user)
         password.send_keys(pwd)
         submit.click()
-        driver.get('http://zwu.hustoj.com')  # 登陆后回到主页
+        driver.get('http://' + url.split('/')[2])  # 登陆后回到主页
         return 'login: success'
     except UnexpectedAlertPresentException:
         # print(e.msg)
@@ -62,6 +70,8 @@ def sign(driver, user, pwd):
         return 'sign: success'
     except UnexpectedAlertPresentException:
         return 'sign: User ID Too Short OR Password should be Longer than 6!'
+    except NoSuchElementException:
+        return '未找到注册窗口'
     except Exception:
         return '未知错误，请联系管理员'
     '''
@@ -79,10 +89,12 @@ def sign(driver, user, pwd):
 if __name__ == "__main__":
     # driver = webdriver.Firefox()
     driver = driverremote.browser(NODELIST.get('host'), NODELIST.get('DesiredCapabilities'))
-    result = sign(driver, user='1', pwd='')
-    print(result)
-    url = 'http://zwu.hustoj.com/loginpage.php'
-    result = login(driver, url, user='test', pwd='12346')
+    # result = sign(driver, user='1', pwd='')
+    # print(result)
+    url = 'https://passport.jd.com/new/login.aspx'
+    result = login(driver, url, user='695118908@qq.com', pwd='695118908zsj')
+    driver.get('https://passport.jd.com/')
+    sleep(5)
     print(result)
     driver.quit()
 

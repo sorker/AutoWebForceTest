@@ -15,13 +15,32 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import index, view
+from ActivityModel import index, downloads, about, project, view, services, projects
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', view.index),
-    path('project/', view.project),
-    path('services/', view.services),
-    path('downloads/', view.downloads),
-    path('about/', view.about),
+    path('', index.index),
+    path('index_site/', index.index_site, name='index_site'),
+
+    path('projects/', projects.projects),
+    path('projects/test_sign/', projects.test_sign),
+    path('projects/test_login/', projects.test_login),
+    path('projects/test_problem/', projects.test_problem),
+    path('projects/test_force/', projects.test_force),
+    path('projects/test_upload/', projects.test_upload),
+    path('projects/file_generation/', projects.file_generation),
+
+    path('projects/analytics/', project.analytice),
+    path('projects/export/', project.export),
+    path('projects/reports/', project.reports),
+
+    path('services/', services.services),
+    path('services_ajax/', services.services_ajax, name='services_ajax'),
+
+    path('downloads/', downloads.downloads),
+    path('downloads/file_down/', downloads.file_down, name='file_down'),
+
+    path('about/', about.about),
+
+    path('test/', view.gauge),
 ]

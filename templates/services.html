@@ -1,58 +1,49 @@
 {% extends "base/base.html" %}
+{% block custommeta %}
+    {#    <meta http-equiv="refresh" content="600">#}
+{% endblock %}
 {% block navigationBar %}
     {% include "base/navigationBar.html" %}
 {% endblock %}
 {% block indexInfo %}
-     <h1 class="page-header">Dashboard</h1>
-    <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                 width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-            <h4>Label</h4>
-            <span class="text-muted">Something else</span>
-        </div>
-    </div>
-
-    <h2 class="sub-header">Section title</h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
+    {% block customcss %}
+        <style type="text/css">
+            html, body {
+                background: #bfb8b8;
+            }
+        </style>
+    {% endblock %}
+    {% include 'projects/overview.html' %}
+    {% block chartblock %}
+        <span id="result" style="float: left; color: #FF0000"></span>
+        <h2 class="sub-header">服务器web状态：</h2>
+        <table id="service_table" class="table table-striped">
             <thead>
             <tr>
-                <th>#</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
-                <th>Header</th>
+                <th>id</th>
+                <th>域名</th>
+                <th>总内存MB</th>
+                <th>使用内存MB</th>
+                <th>磁盘容量G</th>
+                <th>已用磁盘G</th>
+                <th>负载均衡%</th>
+                <th>线程比</th>
+                <th>接收数据MB</th>
+                <th>发送数据MB</th>
+                <th>80端口连接数</th>
+                <th>CPU使用%</th>
+                <th>获取时间</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1,001</td>
-                <td>Lorem</td>
-                <td>ipsum</td>
-                <td>dolor</td>
-                <td>sit</td>
-            </tr>
+            {% for test_service in test_services_list %}
+                <tr>
+                    {% for k, v in test_service.items %}
+                        <td>{{ v }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
-    </div>
-    </div>
+    {% endblock %}
 {% endblock %}

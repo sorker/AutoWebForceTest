@@ -1,18 +1,12 @@
 # -*- coding:utf-8 -*-
 """
  @time    : 2019/2/20 15:32
- @desc    : this is a desc
+ @desc    : 针对毕业设计站点:http://zwu.hustoj.com的操作类
  @Author  : Sorke
  @Email   : sorker0129@hotmail.com
 """
 from AutoActivity import loginorsign
-from AutoActivity import driverremote
 from AutoActivity import configs
-
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities as DC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import Remote
 from time import sleep
@@ -23,7 +17,7 @@ DEFAULT_ANSWER = '#include <stdio.h>\n' \
                  '{\nint a,b;' \
                  '\nscanf("%d %d",&a, &b);\n' \
                  'printf("%d\\n",a+b);\n' \
-                 'return 0\n' \
+                 'return 0;\n' \
                  '}'
 
 
@@ -36,10 +30,11 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
     """
     username = driver.find_element_by_id('profile')   # 验证是否登陆
     if username.text == '登录':
-        loginorsign.login(driver=driver, user=user, pwd=pwd)
+        url = 'http://zwu.hustoj.com/loginpage.php'
+        loginorsign.login(driver=driver, url=url, user=user, pwd=pwd)
     driver.get('http://zwu.hustoj.com/problem.php?id=' + problem_id)
     driver.find_element_by_link_text('提交').click()
-    sleep(0.4)
+    sleep(1)
     frame_element = driver.find_element_by_id('frame_source')
     driver.switch_to.frame(frame_element)
     driver.find_element_by_id('textarea').send_keys(answer)
@@ -53,7 +48,10 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
             sleep(0.8)
             message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
     except NoSuchElementException:
-        message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/a')
+        try:
+            message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/a')
+        except NoSuchElementException:
+            message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
     except Exception as e:
         return '获取结果超时, erroe %s' % e
     message = message_element.text

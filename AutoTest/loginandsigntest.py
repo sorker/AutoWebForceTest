@@ -1,8 +1,14 @@
+"""
+ @time    : 2019/2/20 15:32
+ @desc    : 单元测试类
+ @Author  : Sorke
+ @Email   : sorker0129@hotmail.com
+"""
 import unittest
 from time import sleep
 from selenium import webdriver
 from AutoActivity.datadeal import readcvs, usersput
-from AutoActivity.loginorsign import loginorsign
+from AutoActivity.loginorsign import login
 
 
 class loginandsigntest(unittest.TestCase):
@@ -13,7 +19,7 @@ class loginandsigntest(unittest.TestCase):
         self.user = self.users.get('user')  # 从字典中取出用户名
         self.pwd = self.users.get('pwd')  # 从字典中取出密码
         driver = webdriver.Chrome()
-        self.user_active = loginorsign(driver=driver)
+        self.user_active = login(driver=driver)
         print('start')
 
     def test_login(self):

@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
+from django.conf.global_settings import SESSION_COOKIE_NAME, SESSION_COOKIE_PATH
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)--当前文件夹所在的目录
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ActivityModel.apps.ActivitymodelConfig',
     'bootstrap3'
+    # 'mdeditor'  # 富文本编辑器
 ]
 
 MIDDLEWARE = [
@@ -73,23 +76,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AutoWebForceTest.wsgi.application'
 
+# Session_Cookies
+SESSION_COOKIE_AGE = 36000                            # Session的cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
+CSRF_COOKIE_AGE = 36000                              # cookie失效日期（2周）（默认） 60 * 60 * 24 * 7 * 2
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',  # 或者使用 django.db.backends.mysql
-        'NAME': 'autoworkers',
-        'USER': 'user',
-        'PASSWORD': 'user',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    },
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
+    #     'ENGINE': 'mysql.connector.django',  # 或者使用 django.db.backends.mysql
+    #     'NAME': 'autoworkers',  # 数据库名
+    #     'USER': 'user',
+    #     'PASSWORD': 'user',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    # },
+    'default': {  # 自带的数据库环境
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -117,7 +123,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -139,7 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
+STATIC_ROOT = os.path.join(BASE_DIR, 'templates')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),   # 若存放静态文件的static目录在project目录下，则用该定义
 ]

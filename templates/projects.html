@@ -1,0 +1,259 @@
+{% extends 'base/dashboard.html' %}
+
+{% block projectDetail %}
+    {% block customcss %}
+        <style type="text/css">
+            html, body {
+                background: #e8e7e78a;
+            }
+        </style>
+    {% endblock %}
+    {% include 'projects/overview.html' %}
+    {% block chartblock %}
+        <span id="result" style="float: left; color: #FF0000"></span>
+        <div class="form-inline" style="padding-top: 20px">
+            <div class="form-group">
+                <label for="exampleInputName2">文件名</label>
+                <input type="text" class="form-control" id="sign_file" placeholder="account">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">登录网址</label>
+                <input type="text" class="form-control" id="sign_site"
+                       placeholder="http://zwu.hustoj.com/loginpage.php">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">用户数</label>
+                <input type="text" class="form-control" id="sign_num" placeholder="10">
+            </div>
+            <a id="test_sign" class="btn btn-default">注册用户</a>
+            <a id="sign_process" class="btn btn-default" >生成可登录的用户文件</a>
+        </div>
+        <div class="form-inline" style="padding-top: 20px">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputName2">上传的文件</label>
+                <input type="file" class="form-control" id="login_local_file" placeholder="account">
+            </div>
+            <a id="test_upload" class="btn btn-default">上传</a>
+            <div class="form-group">
+                <label for="exampleInputName2">刚注册的文件</label>
+                <input type="text" class="form-control" id="login_file" placeholder="account">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">登录网址</label>
+                <input type="text" class="form-control" id="login_site"
+                       placeholder="http://zwu.hustoj.com/loginpage.php">
+            </div>
+            <a id="test_login" class="btn btn-default">登录测试</a>
+        <a id="login_process" class="btn btn-default" >生成可登录的用户文件</a>
+        </div>
+        <div class="form-inline" style="padding-top: 20px">
+            <div class="form-group">
+                <label for="exampleInputName2">用户名文件</label>
+                <input type="text" class="form-control" id="problem_file" placeholder="account">
+            </div>
+            <a id="test_problem" class="btn btn-default">针对性问题测试</a>
+        <a id="problem_process" class="btn btn-default" >生成问题测试文件</a>
+        </div>
+        <div class="form-inline" style="padding-top: 20px">
+            <div class="form-group">
+                <label for="exampleInputName2">获取站点网址深度</label>
+                <input type="text" class="form-control" id="force_deep" placeholder="1或2或3.">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail2">登录网址</label>
+                <input type="text" class="form-control" id="force_site"
+                       placeholder="http://zwu.hustoj.com/loginpage.php">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">用户名文件</label>
+                <input type="text" class="form-control" id="force_file" placeholder="account">
+            </div>
+            <a id="test_force" class="btn btn-default">针对性压力测试</a>
+        <a id="force_process" class="btn btn-default" >生成压力测试文件</a>
+        </div>
+        {% block customjs %}
+            <script type="text/javascript">
+                $('#test_sign').click(function () {
+                    var filename = $('#sign_file').val();
+                    var site = $('#sign_site').val();
+                    var num = $('#sign_num').val();
+                    if(filename == ''){
+                        $('#result').html('文件名不能为空');
+                    }
+                    else if (site != 'http://zwu.hustoj.com/loginpage.php') {
+                        $('#result').html('登录网址错误，例：http://zwu.hustoj.com/loginpage.php');
+                    }
+                    else if (isNaN(num) && num <= 0) {
+                        $('#result').html('num大于0，且为整数');
+                    }
+                    else {
+                        $.ajax({
+                            url: 'test_sign/',
+                            type: 'GET',
+                            data: {
+                                filename: filename,
+                                site: site,
+                                num: num
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在注册，请稍等......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                                $('#login_site').attr('value', site);
+                                $('#force_site').attr('value', site);
+                            }
+                        })
+                    }
+                });
+                $('#test_login').click(function () {
+                    var filename = $('#login_file').val();
+                    var site = $('#login_site').val();
+                    if(filename == ''){
+                        $('#result').html('文件名不能为空');
+                    }
+                    else if (site.indexOf('http://') == -1) {
+                        $('#result').html('登录网址错误，例：http://zwu.hustoj.com/loginpage.php');
+                    }
+                    else {
+                        $.ajax({
+                            url: 'test_login/',
+                            type: 'GET',
+                            data: {
+                                filename: filename,
+                                site: site
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在运行登录程序，请稍等......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                            }
+                        })
+                    }
+                });
+                $('#test_upload').click(function () {
+                    var formData = new FormData();
+                    formData.append('local_file', $('#login_local_file')[0].files[0]);
+                    console.log(formData);
+                    $.ajax({
+                        url: 'test_upload/',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,  // tell jquery not to process the data
+                        contentType: false, // tell jquery not to set contentType
+                        headers: {"X-CSRFToken": $.cookie('csrftoken')},  // django头部信息
+                        beforeSend: function () {
+                            // 禁用按钮防止重复提交
+                            $('#result').html('正在上传......');
+                        },
+                        success: function (res) {
+                            $('#result').html(res.message);
+                            $('#sign_file').attr('value', res.filename);
+                            $('#login_file').attr('value', res.filename);
+                            $('#force_file').attr('value', res.filename);
+                            $('#problem_file').attr('value', res.filename)
+                        }
+                    })
+                });
+                $('#test_problem').click(function () {
+                    var filename = $('#problem_file').val();
+                    if(filename == ''){
+                        $('#result').html('文件名不能为空');
+                    }
+                    else {
+                        $.ajax({
+                            url: 'test_problem/',
+                            type: 'GET',
+                            data: {
+                                filename: filename
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在运行针对性问题程序，请稍等......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                                /**
+                                 if ('success' === res.message) {
+                                console.log(res.message)
+                            } else {
+                                $('#result').html(res.message);
+                            }
+                                 **/
+                            }
+                        })
+                    }
+                });
+                $('#test_force').click(function () {
+                    var deep = $('#force_deep').val();
+                    var filename = $('#force_file').val();
+                    var site = $('#force_site').val();
+                    if(isNaN(deep) || deep<0 || deep>3){
+                        $('#result').html('0<=deep<=3，且为整数');
+                    }
+                    else if (site.indexOf('http://') == -1) {
+                        $('#result').html('登录网址错误，例：http://zwu.hustoj.com/loginpage.php');
+                    }
+                    else if(filename == ''){
+                        $('#result').html('文件名不能为空');
+                    }
+                    else {
+                        $.ajax({
+                            url: 'test_force/',
+                            type: 'GET',
+                            data: {
+                                deep:deep,
+                                site: site,
+                                filename: filename
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在运行压力测试程序，请稍等......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                            }
+                        })
+                    }
+                });
+                $('#force_process').click(function () {
+                    fileajax('force_process')
+                });
+                $('#problem_process').click(function () {
+                    fileajax('problem_process')
+                });
+                $('#login_process').click(function () {
+                    fileajax('login_process')
+                });
+                $('#sign_process').click(function () {
+                    fileajax('sign_process')
+                });
+                function fileajax(process_name) {
+                    $.ajax({
+                            url: 'file_generation/',
+                            type: 'GET',
+                            data: {
+                                process_name:process_name
+                            },
+                            {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                            beforeSend: function () {
+                                // 禁用按钮防止重复提交
+                                $('#result').html('正在生成,请稍后......');
+                            },
+                            success: function (res) {
+                                $('#result').html(res.message);
+                            }
+                        })
+                }
+            </script>
+        {% endblock %}
+    {% endblock %}
+{% endblock %}

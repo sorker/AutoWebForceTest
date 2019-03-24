@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    {% include 'base/statichtml/meta.html' %}
 
-    {% include 'base/css.html' %}
-    <title>Justified Nav Template for Bootstrap</title>
-    {% include 'base/js.html' %}
+    {% block custommeta %}
+
+    {% endblock %}
+
+    {% include 'base/statichtml/css.html' %}
+    <title>朱少杰2015014140</title>
+    {% include 'base/statichtml/js.html' %}
 </head>
 
-<body style="background-image: url('/static/bootstrap/image/bg.jpg')">
+<body>
 <div class="container">
     <!-- The justified navigation menu is meant for single line per list item.
          Multiple lines will require custom code not provided by Bootstrap. -->
     <div class="masthead">
-        <h3 class="text-muted">自动化测试</h3>
+        <p style="font-size: 24px; color: #777; margin: 10px">自动化测试</p>
+{#    <h3 class="text-muted-base">自动化测试</h3>#}
         {% block navigationBar %}
         {% endblock %}
     </div>
@@ -28,7 +28,7 @@
 
     <!-- Site footer -->
     <footer class="footer" style="color: #9acfea">
-        <p>&copy; 2019 Auto, Sorke.</p>
+        <p>&copy; 2019.02, Sorke.</p>
     </footer>
 
 </div> <!-- /container -->

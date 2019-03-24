@@ -1,0 +1,235 @@
+<h1 class="page-header">服务器状态:<span id="siteIp">{{ request.session.site_ip }}</span></h1>
+<span>80端口连接数:<span id="linksNum">{{ time_data_new.linksNum }}</span></span>
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="Mem" style="width: 100%; height: 270px; " class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>内存</h4>
+        <span class="text-muted">总内存：<span id="TotalM">{{ time_data_new.TotalM }}</span>MB</span>
+    </div>
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="Disk" style="width: 100%; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>磁盘</h4>
+        <span class="text-muted">磁盘:<span id="HardTotal">{{ time_data_new.HardTotal }}</span>G</span>
+    </div>
+</div>
+
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="CPU" style="width: 100%; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>CPU</h4>
+        {#        <span class="text-muted">CPU:<span id="CPUM">{{ time_data_new.Theards }}</span></span>#}
+    </div>
+    <div class="col-xs-6 col-sm-6 placeholder">
+        <div id="LoadStat" style="width: 100%; height: 270px" class="img-responsive"
+             alt="Generic placeholder thumbnail"></div>
+        <h4>负载均衡</h4>
+        <span class="text-muted">线程比:<span id="Theards">{{ time_data_new.Theards }}</span></span>
+    </div>
+</div>
+<p><a id="service_reports" class="btn btn-default" onclick="serviceReport()">生成服务器数据报告</a></p>
+
+{#<h2 class="sub-header">服务器web状态：</h2>#}
+{#<span>发送流量:<span id="ReceiveT">{{ time_data_new.ReceiveT }}</span>MB,接收流量:<span#}
+{#        id="TransmitT">{{ time_data_new.TransmitT }}</span>MB</span>#}
+<div class="table-responsive">
+    {% block chartblock %}
+    {% endblock %}
+</div>
+
+{% block customjs %}
+    <script type="text/javascript">
+        function serviceReport() {
+            process_name = 'service_reports';
+                $.ajax({
+                    url: '/projects/file_generation/',
+                    type: 'GET',
+                    data: {
+                        process_name: process_name
+                    },
+                    {#headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+                    beforeSend: function () {
+                        // 禁用按钮防止重复提交
+                        $('#result').html('正在生成,请稍后......');
+                    },
+                    success: function (res) {
+                        $('#result').html(res.message);
+                    }
+                })
+        }
+
+        {#var time_data_new = {{ time_data_new }};#}
+        var id;
+        var siteIp;
+        var Theards;
+        var ReceiveT;
+        var TransmitT;
+        var linksNum;
+        var datetime;
+        var UserMem = {{ time_data_new.UsedM }};
+        var TotalM = {{ time_data_new.TotalM }};
+        var MemP = UserMem / TotalM;
+        var HardTotal = {{ time_data_new.HardTotal }};
+        var HardUser = {{ time_data_new.HardUser }};
+        var DiskP = HardUser / HardTotal;
+        var LoadStatP = {{ time_data_new.LoadStat }};
+        var CPUP = {{ time_data_new.CPUP }};
+        var Mem_element = document.getElementById("Mem");
+        var Disk_element = document.getElementById("Disk");
+        var CPU_element = document.getElementById("CPU");
+        var siteIp_element = document.getElementById("siteIp");
+        var LoadStat_element = document.getElementById("LoadStat");
+        var TotalM_element = document.getElementById("TotalM");
+        var HardTotal_element = document.getElementById("HardTotal");
+        {#var CPUM_element = document.getElementById("CPUM");#}
+        var Theards_element = document.getElementById("Theards");
+        var ReceiveT_element = document.getElementById("ReceiveT");
+        var TransmitT_element = document.getElementById("TransmitT");
+        var linksNum_element = document.getElementById("linksNum");
+
+        gaugeInfo();
+
+        function gaugeInfo() {
+            var MemE = echarts.init(Mem_element, null, {height: 350});
+            var DiskE = echarts.init(Disk_element, null, {height: 350});
+            var CPUE = echarts.init(CPU_element, null, {height: 350});
+            var LoadStatE = echarts.init(LoadStat_element, null, {height: 350});
+            menoption = {
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '内存使用率',
+                        type: 'gauge',
+                        detail: {formatter: '{value}%'},
+                        data: [{value: (MemP * 100).toFixed(2), name: '使用率:' + UserMem + 'MB'}]
+                    }
+                ]
+            };
+            diskoption = {
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '硬盘使用率',
+                        type: 'gauge',
+                        detail: {formatter: '{value}%'},
+                        data: [{value: (DiskP * 100).toFixed(2), name: '使用率:' + HardUser + 'G'}]
+                    }
+                ]
+            };
+            cpuoption = {
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: 'CPU使用率',
+                        type: 'gauge',
+                        detail: {formatter: '{value}%'},
+                        data: [{value: CPUP, name: '使用率:' + (CPUP / 100).toFixed(2)}]
+                    }
+                ]
+            };                                      // CPU值未获取
+            loadstatoption = {
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                toolbox: {
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series: [
+                    {
+                        name: '负载均衡',
+                        type: 'gauge',
+                        detail: {formatter: '{value}%'},
+                        data: [{value: (LoadStatP * 100).toFixed(2), name: '负载:' + LoadStatP}]
+                    }
+                ]
+            };
+
+            if (menoption && typeof menoption === "object") {
+                MemE.setOption(menoption, true);
+                DiskE.setOption(diskoption, true);
+                CPUE.setOption(cpuoption, true);
+                LoadStatE.setOption(loadstatoption, true);
+            }
+        }
+
+        /**
+         setInterval(function () {
+            option.series[0].data[0].value = (MemP * 100).toFixed(2);
+            myChart.setOption(option, true);
+        }, 10000000);
+         **/
+
+        setInterval(function () {
+            $.getJSON({% url 'services_ajax' %}, function (ret) {
+                time_data_new = ret.time_data_new;
+                id = time_data_new.id;
+                siteIp = time_data_new.site_ip;
+                CPUP = time_data_new.CPUP;
+                UserMem = time_data_new.UsedM;
+                TotalM = time_data_new.TotalM;
+                MemP = UserMem / TotalM;
+                HardTotal = time_data_new.HardTotal;
+                HardUser = time_data_new.HardUser;
+                DiskP = HardUser / HardTotal;
+                LoadStatP = time_data_new.LoadStat;
+                Theards = time_data_new.Theards;
+                ReceiveT = time_data_new.ReceiveT;
+                TransmitT = time_data_new.TransmitT;
+                linksNum = time_data_new.linksNum;
+                datetime = time_data_new.datetime;
+                gaugeInfo();
+                siteIp_element.innerText = siteIp;
+                TotalM_element.innerText = TotalM;
+                HardTotal_element.innerText = HardTotal;
+                {#CPUM_element.innerText = CPUP;                      // CPU值未获取#}
+                Theards_element.innerText = Theards;
+                linksNum_element.innerText = linksNum;
+                var t = new Date(+new Date(datetime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
+                var long = document.getElementById("service_table").rows.length;               //获取table中tr的个数，我的想保留6行，当大于6时可以删除，小于6时不能删除
+                if (long > 0) {
+                    $("#service_table tbody").prepend('<tr>' +
+                        '<td>' + id + '</td>' + '<td>' + siteIp + '</td>' + '<td>' + TotalM + '</td>' +
+                        '<td>' + UserMem + '</td>' + '<td>' + HardTotal + '</td>' +
+                        '<td>' + HardUser + '</td>' + '<td>' + LoadStatP + '</td>' +
+                        '<td>' + Theards + '</td>' + '<td>' + ReceiveT + '</td>' +
+                        '<td>' + TransmitT + '</td>' + '<td>' + linksNum + '</td>' +
+                        '<td>' + CPUP + '</td>' + '<td>' + t + '</td>' + '</tr>');
+                    if (long > 10) {                                                         //判断一下table中tr的个数
+                        $("#service_table tr:last").remove();    //删除table中的最后一个tr
+                    }
+                }
+            })
+        }, 5000);
+
+    </script>
+{% endblock %}
+
