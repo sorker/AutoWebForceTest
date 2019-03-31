@@ -54,10 +54,10 @@ def sign(driver, user, pwd):
     """使用注册方法可直接跳转到注册页面"""
     try:
         driver.get('http://zwu.hustoj.com/registerpage.php')
-        username = driver.find_element_by_xpath('/html/body/div[1]/div/form/center/table/tbody/tr[2]/td[2]/input')
-        password = driver.find_element_by_xpath('/html/body/div[1]/div/form/center/table/tbody/tr[4]/td[2]/input')
-        passwordagain = driver.find_element_by_xpath('/html/body/div[1]/div/form/center/table/tbody/tr[5]/td[2]/input')
-        submit = driver.find_element_by_xpath('/html/body/div[1]/div/form/center/table/tbody/tr[8]/td[2]/input[1]')
+        username = driver.find_element_by_xpath('//input[contains(@placeholder, "用户名")]')
+        password = driver.find_element_by_xpath('//input[contains(@placeholder, "密码")]')
+        passwordagain = driver.find_element_by_xpath('//input[contains(@placeholder, "重复密码")]')
+        submit = driver.find_element_by_xpath('//*[@type="submit"]')
         username.clear()
         password.clear()
         passwordagain.clear()

@@ -84,18 +84,18 @@ CSRF_COOKIE_AGE = 36000                              # cookie失效日期（2周
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'mysql.connector.django',  # 或者使用 django.db.backends.mysql
-    #     'NAME': 'autoworkers',  # 数据库名
-    #     'USER': 'user',
-    #     'PASSWORD': 'user',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
-    # },
-    'default': {  # 自带的数据库环境
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': {
+        'ENGINE': 'mysql.connector.django',  # 或者使用 django.db.backends.mysql
+        'NAME': 'autoworkers',  # 数据库名
+        'USER': 'user',
+        'PASSWORD': 'user',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    },
+    # 'default': {  # 自带的数据库环境
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 

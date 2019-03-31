@@ -9,19 +9,16 @@ from AutoActivity import loginorsign
 from AutoActivity import configs
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import Remote
+from selenium import webdriver
 from time import sleep
 
+
 NODELIST = configs.NODELIST
-DEFAULT_ANSWER = '#include <stdio.h>\n' \
-                 'int main()\n' \
-                 '{\nint a,b;' \
-                 '\nscanf("%d %d",&a, &b);\n' \
-                 'printf("%d\\n",a+b);\n' \
-                 'return 0;\n' \
-                 '}'
+DEFAULT_ANSWER_ID = configs.DEFAULT_ANSWER_ID
+DEFAULT_ANSWER = configs.DEFAULT_ANSWER
 
 
-def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', pwd='123456'):
+def problem_test(driver, problem_id=DEFAULT_ANSWER_ID, answer=DEFAULT_ANSWER, user='test', pwd='123456'):
     """
     网站问题页面提交
     :param driver: 浏览器驱动
@@ -34,13 +31,16 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
         loginorsign.login(driver=driver, url=url, user=user, pwd=pwd)
     driver.get('http://zwu.hustoj.com/problem.php?id=' + problem_id)
     driver.find_element_by_link_text('提交').click()
-    sleep(1)
-    frame_element = driver.find_element_by_id('frame_source')
-    driver.switch_to.frame(frame_element)
-    driver.find_element_by_id('textarea').send_keys(answer)
-    driver.switch_to.default_content()
+    sleep(2)
+    # frame_element = driver.find_element_by_id('frame_source')
+    # driver.switch_to.frame(frame_element)
+    # driver.find_element_by_xpath('/html/body/div[1]/div/center/form/pre/textarea').click()
+    # js = 'editor.setValue(\'' + answer + '\')'
+    js = 'editor.setValue("#include <stdio.h>\nint main()\n{\n    int a,b;\n    scanf(\"%d %d\",&a, &b);\n    printf(\"%d\\n\",a+b);\n    return 0;\n}")'   #js修改
+    driver.execute_script(js)
+    # driver.switch_to.default_content()
     driver.find_element_by_id('Submit').click()
-    sleep(1)
+    sleep(10)
     try:
         message_element = driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[4]/span')
         while message_element.text == '等待' or message_element.text == '编译中':
@@ -60,10 +60,11 @@ def problem_test(driver, problem_id='1000', answer=DEFAULT_ANSWER, user='test', 
 
 if __name__ == "__main__":
     for nodelist in NODELIST:  # 分布式
-        driver = Remote(command_executor='http://' + nodelist.get('host'),
-                        desired_capabilities=nodelist.get('DesiredCapabilities')
-                        )
+        # driver = Remote(command_executor='http://' + nodelist.get('host'),
+        #                 desired_capabilities=nodelist.get('DesiredCapabilities')
+        #                 )
         # driver = driver.browser(NODELIST[1].get('host'), NODELIST[1].get('browserName'))
+        driver = webdriver.Chrome()
         driver.get('http://zwu.hustoj.com')
         answer = DEFAULT_ANSWER
         message = problem_test(driver, answer=answer)
