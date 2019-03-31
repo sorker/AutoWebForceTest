@@ -15,11 +15,23 @@ LOG_DIR = os.path.join(DATA_DIR, 'log')
 LONG_DATE = 999999999999999                             # 默认长整型
 
 NODELIST = [
-    {"host": "127.0.0.1:4444/wd/hub", "DesiredCapabilities": DC.CHROME},  # 分布式节点的地址、自动化端口、运行的浏览器驱动
-    {"host": "127.0.0.1:5555/wd/hub", "DesiredCapabilities": DC.FIREFOX},
-    # {"host": "10.60.76.113:8888/wd/hub", "DesiredCapabilities": DC.CHROME},
-    # {"host": "10.60.76.116:6666/wd/hub", "DesiredCapabilities": DC.CHROME},
+    # {"host": "127.0.0.1:4444/wd/hub", "DesiredCapabilities": DC.CHROME},  # 分布式节点的地址、自动化端口、运行的浏览器驱动
+    {"host": "127.0.0.1:5555/wd/hub", "DesiredCapabilities": DC.CHROME},
+    # {"host": "10.60.76.127:8888/wd/hub", "DesiredCapabilities": DC.CHROME},
+    {"host": "10.60.76.116:6666/wd/hub", "DesiredCapabilities": DC.CHROME},
 ]   # 分布式地址
+
+DEFAULT_ANSWER_ID = 1000
+
+DEFAULT_ANSWER = '#include <stdio.h>\n' \
+                 'int main()\n' \
+                 '{\n' \
+                 'int a,b;\n' \
+                 'scanf("%d %d",&a, &b);\n' \
+                 'printf("%d\\n",a+b);\n' \
+                 'return 0;\n' \
+                 '}'
+
 
 
 def windowsMasterNode():
